@@ -1,15 +1,12 @@
 import './App.css';
-import styled from 'styled-components';
-
-const Text = styled.div`
-  font-size: 30px;
-`;
+import Header from './Header';
+import { HashRouter as Router, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <Text>Hello</Text>
-    </div>
+    <Router className="App">
+      <Header />
+    </Router>
   );
 }
 
