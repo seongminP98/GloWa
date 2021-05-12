@@ -13,6 +13,7 @@ const MapContent = styled.div`
 const MapContentPresenter = ({ location, restaurantList }) => {
   useEffect(() => {
     const script = document.createElement('script');
+    console.log(restaurantList);
     script.async = true;
     // 지도 API를 위한 script src
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_MAP_API_KEY}&autoload=false`;
@@ -21,7 +22,14 @@ const MapContentPresenter = ({ location, restaurantList }) => {
     script.onload = () => {
       kakao.maps.load(() => {
         var positions = restaurantList?.map((restaurant) => {
-          return { title: restaurant.place_name, latlng: new kakao.maps.LatLng(restaurant.y, restaurant.x) };
+          return {
+            address: restaurant.road_address_name,
+            distance: restaurant.distance,
+            url: restaurant.place_url,
+            category: restaurant.category_name.split('>')[1].trim(),
+            title: restaurant.place_name,
+            latlng: new kakao.maps.LatLng(restaurant.y, restaurant.x),
+          };
         });
 
         let container = document.getElementById('myMap');
@@ -45,7 +53,8 @@ const MapContentPresenter = ({ location, restaurantList }) => {
 
         var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
 
-        for (var i = 0; i < positions?.length; i++) {
+        positions?.forEach((p) => {
+          console.log(p);
           // 마커 이미지의 이미지 크기 입니다
           var imageSize = new kakao.maps.Size(24, 35);
 
@@ -53,13 +62,38 @@ const MapContentPresenter = ({ location, restaurantList }) => {
           var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
           // 마커를 생성합니다
-          var markerR = new kakao.maps.Marker({
+          var RestaurantMarker = new kakao.maps.Marker({
             map: map, // 마커를 표시할 지도
-            position: positions[i].latlng, // 마커를 표시할 위치
-            title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            position: p.latlng, // 마커를 표시할 위치
+            title: p.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
             image: markerImage, // 마커 이미지
           });
-        }
+
+          // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+          var iwContent = `<div style="padding:5px; width : 200px">
+          <div style="margin-bottom:15px;"> 
+            <a href=${p.url} target="_blank">${p.title}</a>
+          </div>
+          <div style="margin-bottom:15px;">${p.address}</div>
+          <div style="display:flex; justify-content :space-between"> 
+            <div>${p.category}</div>
+            <div>${p.distance}m</div>
+          </div>
+          </div>`, // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+          // 인포윈도우를 생성합니다
+          var infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+            removable: iwRemoveable,
+          });
+
+          // 마커에 클릭이벤트를 등록합니다
+          kakao.maps.event.addListener(RestaurantMarker, 'click', function () {
+            // 마커 위에 인포윈도우를 표시합니다
+            infowindow.open(map, RestaurantMarker);
+          });
+        });
       });
     };
   });
