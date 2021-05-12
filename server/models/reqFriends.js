@@ -1,19 +1,13 @@
 const Sequelize = require('sequelize');
 
-module.exports = class User extends Sequelize.Model {
+module.exports = class ReqFriends extends Sequelize.Model {
     static init(sequelize){
         return super.init({
-            user_id: {
-                type: Sequelize.STRING(30),
-                allowNull: false,
-                unique: true,
-            },
-            nickname: {
+            my_nickname: {
                 type: Sequelize.STRING(20),
                 allowNull: false,
-                unique: true,
             },
-            password: {
+            req_friend_nickname: {
                 type: Sequelize.STRING(20),
                 allowNull: false,
             },
@@ -21,8 +15,8 @@ module.exports = class User extends Sequelize.Model {
             sequelize,
             underscored: false,
             timestamps: true,
-            modelName: 'User',
-            tableName: 'users',
+            modelName: 'ReqFriends',
+            tableName: 'reqFriends',
             paranoid: false,
             charset: 'utf8',
             collate: 'utf8_general_ci',

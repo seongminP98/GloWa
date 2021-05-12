@@ -2,14 +2,15 @@ const express = require('express');
 const dotenv = require('dotenv');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const {sequlize} = require('./models');
+const {sequelize} = require('./models');
 const passport = require('passport');
-
-sequlize.sync({ force: false })
+const passportConfig = require('./passport');
+sequelize.sync({ force: false })
   .then(()=>{
     console.log('DB연결 성공')
   })
   .catch((err)=>{
+    console.log("에러")
     console.error(err)
   })
 
