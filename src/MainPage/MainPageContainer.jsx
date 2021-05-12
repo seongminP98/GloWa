@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainPagePresenter from './MainPagePresenter';
 import axios from 'axios';
 
@@ -6,8 +6,17 @@ const MainPageContainer = () => {
   const [isAddress, setIsAddress] = useState('');
   const [isZoneCode, setIsZoneCode] = useState();
   const [location, setLocation] = useState();
+  const [restaurantList, setRestaurantList] = useState();
 
-  const handleComplete = (data) => {
+  useEffect(() => {
+    getLocation();
+  }, [isAddress]);
+
+  useEffect(() => {
+    getRestaurant();
+  }, [location]);
+
+  const handleComplete = async (data) => {
     let fullAddress = data.address;
     let extraAddress = '';
 
@@ -22,21 +31,34 @@ const MainPageContainer = () => {
     }
     setIsZoneCode(data.zonecode);
     setIsAddress(fullAddress);
-    getPosition();
   };
 
-  const getPosition = async () => {
+  const getLocation = async () => {
     await axios
       .get(`https://dapi.kakao.com/v2/local/search/address.json?analyze_type=similar&page=1&size=10&query=${isAddress}`, {
         headers: {
           Authorization: `KakaoAK ${process.env.REACT_APP_REST_API_KEY}`,
         },
       })
-      .then(({ data: { documents } }) => setLocation({ x: documents[0].x, y: documents[0].y }))
-      .then(() => console.log(location));
+      .then(({ data: { documents } }) => {
+        setLocation({ x: documents[0].x, y: documents[0].y });
+      });
   };
 
-  return <MainPagePresenter handleComplete={handleComplete} location={location} />;
+  const getRestaurant = async () => {
+    await axios
+      .get(
+        `https://dapi.kakao.com/v2/local/search/keyword.json?page=1&size=15&sort=accuracy&query=%EB%A7%9B%EC%A7%91&x=${location?.x}&y=${location?.y}&radius=500&category_group_code=FD6`,
+        {
+          headers: {
+            Authorization: `KakaoAK ${process.env.REACT_APP_REST_API_KEY}`,
+          },
+        }
+      )
+      .then(({ data: { documents } }) => setRestaurantList(documents));
+  };
+
+  return <MainPagePresenter handleComplete={handleComplete} location={location} restaurantList={restaurantList} />;
 };
 
 export default MainPageContainer;
