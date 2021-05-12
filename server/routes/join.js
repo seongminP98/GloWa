@@ -28,7 +28,7 @@ router.post('/',async(req,res,next)=>{
         const exUser = await User.findOne({where:{user_id: req.body.id}});
         const hash = await bcrypt.hash(req.body.password,12);
         await User.create({
-            user_id: req.body.id,
+            user_id: req.body.user_id,
             nickname: req.body.nickname,
             password: hash,
         });
