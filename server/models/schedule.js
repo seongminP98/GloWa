@@ -3,14 +3,6 @@ const Sequelize = require('sequelize');
 module.exports = class Schedule extends Sequelize.Model {
     static init(sequelize){
         return super.init({
-            my_nickname: {
-                type: Sequelize.STRING(30),
-                allowNull: false,
-            },
-            friend_nickname: {
-                type: Sequelize.STRING(20),
-                allowNull: false,
-            },
             date: {
                 type: Sequelize.DATE,
                 allowNull: false,
@@ -30,5 +22,7 @@ module.exports = class Schedule extends Sequelize.Model {
             collate: 'utf8_general_ci',
         })
     }
-    static associate(db){}
+    static associate(db){
+        db.Schedule.belongsToMany(db.User, {through: 'Schedulemanage'});
+    }
 }
