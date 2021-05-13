@@ -108,20 +108,30 @@ const LinkInnerSpan = styled.span`
   margin-right: 5px;
 `;
 
-const JoinPresenter = ({ onChange, id, password, nickname, passwordCheck }) => {
+const JoinPresenter = ({ onSubmit, onChange, id, password, nickname, passwordCheck }) => {
   return (
     <Join>
-      <JoinForm>
+      <JoinForm onSubmit={onSubmit}>
         <JoinTitle>회원가입</JoinTitle>
         <InputContainer>
           <InputLabel for="id">아이디</InputLabel>
-          <Input maxLength={10} value={id} placeholder="ID" id="id" onChange={onChange} />
+          <Input required={true} maxLength={10} value={id} placeholder="ID" id="id" onChange={onChange} />
           <InputLabel for="nickname">닉네임</InputLabel>
-          <Input maxLength={8} value={nickname} placeholder="Nickname" id="nickname" onChange={onChange} />
+          <Input required={true} maxLength={8} value={nickname} placeholder="Nickname" id="nickname" onChange={onChange} />
           <InputLabel for="password">비밀번호</InputLabel>
-          <Input minLength={6} maxLength={13} type="password" value={password} placeholder="Password" id="password" onChange={onChange} />
+          <Input
+            required={true}
+            minLength={6}
+            maxLength={13}
+            type="password"
+            value={password}
+            placeholder="Password"
+            id="password"
+            onChange={onChange}
+          />
           <InputLabel for="passwordCheck">비밀번호 확인</InputLabel>
           <Input
+            required={true}
             minLength={6}
             maxLength={13}
             type="password"
@@ -131,7 +141,7 @@ const JoinPresenter = ({ onChange, id, password, nickname, passwordCheck }) => {
             onChange={onChange}
           />
         </InputContainer>
-        <JoinButton>회원가입</JoinButton>
+        <JoinButton type="submit">회원가입</JoinButton>
         <AskLoginDiv>
           <AskLoginTitle>이미 계정이 있으신가요?</AskLoginTitle>
           <LoginLink to="/login">
