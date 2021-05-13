@@ -1,79 +1,79 @@
 const express = require('express');
-const passport = require('passport');
 const router = express.Router();
+const {Op} = require('sequelize');
 
 const Friends = require('../models/friends');
 const ReqFriend = require('../models/reqFriends');
-const Schedule = require('../models/schedule');
+const User = require('../models/user');
+
+router.post('/search',(req,res,next)=>{
+    let list = await User.findAll({
+        attributes:['id','nickname'],
+        where:{ 
+            nickname:{
+                [Op.like]: `%${req.body.req_nickname}%`
+            }
+        }
+    })
+    if(list){
+        res.status(200).send({code: 200, ...list})
+    } else{
+        res.status(400).send({code: 400, message: '찾는 닉네임이 없습니다'})
+    }
+})
+
+
 router.post('/add',(req,res,next)=>{
     await ReqFriend.create({
-        my_nickname: req.body.nickname,
-        req_friend_nickname: req.body.req_nickname,
+        my_id: req.body.id,
+        req_friend_id: req.body.req_id,
     })
     res.status(200).send({code:200, message: '친구 요청 완료'});
     
 })
 
-router.post('/accept',(req,res,next)=>{
+router.get('/req/list',(req,res,next)=>{
     let friend = await ReqFriend.findAll({
+        attributes:[my_id],
         where:{
-            req_friend_nickname: req.body.nickname
+            req_friend_id: req.body.id
         }
     })
-    await Friends.create({
-        my_nickname: friend.my_nickname,
-        req_friend_nickname: friend.req_friend_nickname,
+    if(friend){
+        res.status(200).send({code:200, ...friend});
+    } else{
+        res.status(400).send({code:400, message: '받은 친구요청이 없습니다.'});
+    }
+
+})
+
+router.post('/accept',(req,res,next)=>{
+    let friend = await ReqFriend.findOne({
+        where:{
+            req_friend_id: req.body.id,
+            my_id: req.body.req_id, //요청보낸 사람의 아이디.
+        }
     })
-    await Friends.create({
-        my_nickname: friend.req_friend_nickname,
-        req_friend_nickname: friend.my_nickname,
+    let myId = await User.findOne({
+        where:{
+            id: friend.req_friend_id
+        }
     })
+    await myId.addFollowings(parseInt(friend.my_id,10));
+    let fId = await User.findOne({
+        where:{
+            id: friend.my_id
+        }
+    })
+    await fId.addFollowers(parseInt(friend.req_friend_id,10))
+    
     await ReqFriend.destroy({
         where :{
             req_friend_nickname: req.body.nickname
         }
     })
-    res.status(200).send({code:200, message: '친구 수락 완료'});
+    res.status(200).send({code:200, message: '친구요청 수락 완료'});
 
-})
-
-router.get('/makeSchedule',(req,res,next)=>{
-    let friend = await Friends.findAll({
-        attributes:[friend_nickname],
-        where:{
-            my_nickname: req.body.nickname
-        }
-    })
-    res.status(200).send({code:200, ...friend});
-})
-
-router.post('/madeSchedule',(req,res,next)=>{
-    await Schedule.create({
-        my_nickname: req.body.nickname,
-        friend_nickname: req.body.friend_nickname,
-        date: req.body.date,
-        place: req.body.place,
-    })
-    res.status(200).send({code: 200, message: '스케줄 등록 완료'});
-})
-
-router.post('/showSchedule',(req,res,next)=>{
-    let schedule = await Schedule.findAll({
-        where:{
-            my_nickname: req.body.nickname
-        }
-    })
-    res.status(200).send({code: 200, ...schedule});
-})
-
-router.post('/searchSchedule',(req,res,next)=>{
-    let schedule = await Schedule.findAll({
-        where:{
-            my_nickname: req.body.nickname,
-            friend_nickname: req.body.friend_nickname
-        }
-    })
-    res.status(200).send({code: 200, ...schedule});
 })
 
 module.exports = router;

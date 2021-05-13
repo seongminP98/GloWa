@@ -3,12 +3,12 @@ const Sequelize = require('sequelize');
 module.exports = class ReqFriends extends Sequelize.Model {
     static init(sequelize){
         return super.init({
-            my_nickname: {
-                type: Sequelize.STRING(20),
+            my_id: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            req_friend_nickname: {
-                type: Sequelize.STRING(20),
+            req_friend_id: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
             },
         },{
