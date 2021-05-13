@@ -10,10 +10,6 @@ const MapContent = styled.div`
   top: 40px;
 `;
 
-const Test = styled.div`
-  background-color: red;
-`;
-
 const MapContentPresenter = ({ location, restaurantList }) => {
   useEffect(() => {
     const script = document.createElement('script');
