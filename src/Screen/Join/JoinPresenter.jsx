@@ -108,20 +108,28 @@ const LinkInnerSpan = styled.span`
   margin-right: 5px;
 `;
 
-const JoinPresenter = () => {
+const JoinPresenter = ({ onChange, id, password, nickname, passwordCheck }) => {
   return (
     <Join>
       <JoinForm>
         <JoinTitle>회원가입</JoinTitle>
         <InputContainer>
           <InputLabel for="id">아이디</InputLabel>
-          <Input placeholder="ID" id="id" />
+          <Input maxLength={10} value={id} placeholder="ID" id="id" onChange={onChange} />
           <InputLabel for="nickname">닉네임</InputLabel>
-          <Input placeholder="Nickname" id="nickname" />
+          <Input maxLength={8} value={nickname} placeholder="Nickname" id="nickname" onChange={onChange} />
           <InputLabel for="password">비밀번호</InputLabel>
-          <Input placeholder="Password" id="password" />
+          <Input minLength={6} maxLength={13} type="password" value={password} placeholder="Password" id="password" onChange={onChange} />
           <InputLabel for="passwordCheck">비밀번호 확인</InputLabel>
-          <Input placeholder="Password Check" id="passwordCheck" />
+          <Input
+            minLength={6}
+            maxLength={13}
+            type="password"
+            value={passwordCheck}
+            placeholder="Password Check"
+            id="passwordCheck"
+            onChange={onChange}
+          />
         </InputContainer>
         <JoinButton>회원가입</JoinButton>
         <AskLoginDiv>
