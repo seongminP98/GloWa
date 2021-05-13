@@ -127,7 +127,7 @@ const LoginPresenter = () => {
 
       <AskJoinDiv>
         <AskJoinTitle>아직 계정이 없으신가요?</AskJoinTitle>
-        <JoinLink>
+        <JoinLink to="/join">
           <LinkInnerSpan>계정 만들기</LinkInnerSpan>
           <LinkInnerSpan>
             <i class="fas fa-chevron-right"></i>
