@@ -1,22 +1,26 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Friends extends Sequelize.Model {
+module.exports = class InvSchedule extends Sequelize.Model {
     static init(sequelize){
         return super.init({
-            my_nickname: {
-                type: Sequelize.STRING(20),
+            schedule_id: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            friend_nickname: {
-                type: Sequelize.STRING(20),
+            my_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+            },
+            req_friend_id: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
             },
         },{
             sequelize,
             underscored: false,
             timestamps: true,
-            modelName: 'Friends',
-            tableName: 'friends',
+            modelName: 'ReqFriends',
+            tableName: 'reqFriends',
             paranoid: false,
             charset: 'utf8',
             collate: 'utf8_general_ci',
