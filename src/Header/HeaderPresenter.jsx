@@ -1,49 +1,50 @@
 import React from 'react';
-import Styled from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const Header = Styled.header`
-    height : 120px;
-    display : flex;
-    justify-content : space-between;
+const Header = styled.header`
+  height: 120px;
+  display: flex;
+  justify-content: space-between;
 `;
 
-const Title = Styled.div`
-    font-size : 38px;
-    color : #2962ff;
-    min-width : 500px;
-    display : flex;
-    flex-direction : column;
-    justify-content : center;
-    align-items : flex-start;
-    padding : 0px 100px;
-    font-family : RocknRoll One;
+const Title = styled(Link)`
+  font-size: 38px;
+  color: #2962ff;
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px 100px;
+  font-family: RocknRoll One;
+  text-decoration: none;
 `;
-const Subtitle = Styled.div`
-    font-family: 'MaplestoryOTFBold';
-    font-size : 16px;
-`;
-
-const Menu = Styled.div`
-    min-width : 500px;
-    display : flex;
-    align-items :center;
-    justify-content : flex-end;
-    padding : 0px 100px;
+const Subtitle = styled.div`
+  font-family: 'MaplestoryOTFBold';
+  font-size: 16px;
 `;
 
-const StyledLink = Styled(Link)`
-    margin : 0px 10px;
-    font-size : 14px;
-    font-weight : 400;
-    text-decoration : none;
-    color :#000000;
+const Menu = styled.div`
+  min-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0px 100px;
 `;
 
-const Titlediv = Styled.div`
-    height: 100%;
-    display : flex;
-    align-items : center;
+const StyledLink = styled(Link)`
+  margin: 0px 10px;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  color: #000000;
+`;
+
+const Titlediv = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 const HeaderPresenter = () => {
@@ -51,7 +52,7 @@ const HeaderPresenter = () => {
     <Header>
       <Titlediv>
         <StyledLink>
-          <Title>
+          <Title to="/">
             <Subtitle>어디서 볼까?</Subtitle>
             Glowa!
           </Title>
