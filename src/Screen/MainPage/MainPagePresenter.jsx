@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import DaumPostcode from 'react-daum-postcode';
-import Map from '../MapContent';
+import Map from '../../components/MapContent';
 
 // 메인 페이지 공간
 const MainPage = styled.div`
