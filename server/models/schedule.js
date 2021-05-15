@@ -3,6 +3,14 @@ const Sequelize = require('sequelize');
 module.exports = class Schedule extends Sequelize.Model {
     static init(sequelize){
         return super.init({
+            my_id:{
+                type:Sequelize.INTEGER,
+                allowNull: false,
+            },
+            name:{
+                type:Sequelize.STRING(20),
+                allowNull: false,
+            },
             date: {
                 type: Sequelize.DATE,
                 allowNull: false,

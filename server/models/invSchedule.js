@@ -3,15 +3,15 @@ const Sequelize = require('sequelize');
 module.exports = class InvSchedule extends Sequelize.Model {
     static init(sequelize){
         return super.init({
-            schedule_id: {
-                type: Sequelize.INTEGER,
+            schedule_name: {
+                type: Sequelize.STRING(20),
                 allowNull: false,
             },
             my_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            req_friend_id: {
+            invite_friend_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
