@@ -75,6 +75,7 @@ const LoginButton = styled.button`
   color: #ffffff;
   font-weight: 600;
   font-size: 15px;
+  border-radius: 4px;
   &:hover {
     background-color: #0039cb;
   }
@@ -108,21 +109,21 @@ const LinkInnerSpan = styled.span`
   margin-right: 5px;
 `;
 
-const LoginPresenter = () => {
+const LoginPresenter = ({ id, password, onChange, onSubmit }) => {
   return (
     <Login>
-      <LoginForm>
+      <LoginForm onSubmit={onSubmit}>
         <LoginTitle>로그인</LoginTitle>
         <InputContainer>
-          <InputLabel for="username">아이디</InputLabel>
-          <Input placeholder="Username" id="username" />
+          <InputLabel for="id">아이디</InputLabel>
+          <Input onChange={onChange} value={id} placeholder="ID" id="id" />
           <PasswordTitleDiv>
             <InputLabel for="password">비밀번호</InputLabel>
             <PasswordResetLink to="#">비밀번호 재설정</PasswordResetLink>
           </PasswordTitleDiv>
-          <Input placeholder="Password" id="password" />
+          <Input onChange={onChange} value={password} placeholder="Password" id="password" type="password" />
         </InputContainer>
-        <LoginButton>로그인 하기</LoginButton>
+        <LoginButton type="submit">로그인 하기</LoginButton>
       </LoginForm>
 
       <AskJoinDiv>
