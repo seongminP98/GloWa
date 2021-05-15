@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {Op} = require('sequelize');
 
-const Friends = require('../models/friends');
+
 const ReqFriend = require('../models/reqFriends');
 const User = require('../models/user');
 
