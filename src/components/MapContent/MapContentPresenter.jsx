@@ -10,7 +10,7 @@ const MapContent = styled.div`
   top: 40px;
 `;
 
-const MapContentPresenter = ({ location, restaurantList, mode }) => {
+const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, getYposAverage, center }) => {
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
@@ -36,14 +36,14 @@ const MapContentPresenter = ({ location, restaurantList, mode }) => {
 
             let container = document.getElementById('myMap');
             let options = {
-              center: new kakao.maps.LatLng(location ? location?.y : 37.5759040910202, location ? location?.x : 126.976842133821),
+              center: new kakao.maps.LatLng(center?.x ? center.y : 37.5759040910202, center?.x ? center.x : 126.976842133821),
               level: 4,
             };
 
             const map = new window.kakao.maps.Map(container, options);
 
             //마커가 표시 될 위치
-            let markerPosition = new kakao.maps.LatLng(location?.y, location?.x);
+            let markerPosition = new kakao.maps.LatLng(location[0]?.y, location[0]?.x);
 
             // 마커를 생성
             let marker = new kakao.maps.Marker({
@@ -110,7 +110,8 @@ const MapContentPresenter = ({ location, restaurantList, mode }) => {
           });
         };
         break;
-      case 'multi':
+
+      case 'multi': // 다중 위치 검색
         script.onload = () => {
           kakao.maps.load(() => {
             var positions = restaurantList?.map((restaurant) => {
@@ -119,7 +120,7 @@ const MapContentPresenter = ({ location, restaurantList, mode }) => {
                 address: restaurant.road_address_name,
                 distance: restaurant.distance,
                 url: restaurant.place_url,
-                category: restaurant.category_name.split('>')[1].trim(),
+                category: restaurant.category_name.split('>')[1]?.trim(),
                 title: restaurant.place_name,
                 latlng: new kakao.maps.LatLng(restaurant.y, restaurant.x),
               };
@@ -127,25 +128,27 @@ const MapContentPresenter = ({ location, restaurantList, mode }) => {
 
             let container = document.getElementById('myMap');
             let options = {
-              center: new kakao.maps.LatLng(location ? location?.y : 37.5759040910202, location ? location?.x : 126.976842133821),
-              level: 4,
+              center: new kakao.maps.LatLng(center?.x ? center.y : 37.5759040910202, center?.x ? center.x : 126.976842133821),
+              level: 6,
             };
 
             const map = new window.kakao.maps.Map(container, options);
 
-            //마커가 표시 될 위치
-            let markerPosition = new kakao.maps.LatLng(location?.y, location?.x);
+            location.forEach((l) => {
+              //마커가 표시 될 위치
+              let markerPosition = new kakao.maps.LatLng(l.y, l.x);
 
-            // 마커를 생성
-            let marker = new kakao.maps.Marker({
-              position: markerPosition,
+              // 마커를 생성
+              let marker = new kakao.maps.Marker({
+                position: markerPosition,
+              });
+
+              // 마커를 지도 위에 표시
+              marker.setMap(map);
             });
 
-            // 마커를 지도 위에 표시
-            location && marker.setMap(map);
-
+            // 음식점 마커 표시
             var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
-
             positions?.forEach((p) => {
               // 마커 이미지의 이미지 크기 입니다
               var imageSize = new kakao.maps.Size(24, 35);
@@ -171,13 +174,13 @@ const MapContentPresenter = ({ location, restaurantList, mode }) => {
                 }</a>
                     <div style = "font-size : 13px; margin-right : 5px">${p.category}</div>
                   </div>
-    
+
                   <div style="font-size : 13px;margin-top : 10px;margin-bottom:6px;">${p.address}</div>
-    
-                  <div style="font-size : 13px"> 
+
+                  <div style="font-size : 13px">
                     <div>${p.distance}m</div>
                   </div>
-    
+
                   <div style="display:flex ;align-items:center; margin-top : 5px">
                     <a href="#">길찾기</a>
                     <form style="margin-left :5px" method="POST"><button type="submit">즐겨찾기 추가</button></form>

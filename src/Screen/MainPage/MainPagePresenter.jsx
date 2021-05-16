@@ -51,7 +51,7 @@ const ModeToggleButton = styled.button`
   cursor: pointer;
 `;
 
-const MainPagePresenter = ({ handleComplete, location, restaurantList, mode, onToggleButtonClick }) => {
+const MainPagePresenter = ({ handleComplete, location, restaurantList, mode, onToggleButtonClick, center }) => {
   return (
     <MainPage>
       <div>
@@ -82,16 +82,16 @@ const MainPagePresenter = ({ handleComplete, location, restaurantList, mode, onT
               <Title>주소를 입력해주세요</Title>
               <DaumPostcode style={postCodeStyle} onComplete={handleComplete} />
             </Post>
-            <Map location={location} restaurantList={restaurantList} mode={mode} />
+            <Map location={location} restaurantList={restaurantList} mode={mode} center={center} />
           </>
         )}
         {mode === 'multi' && (
           <>
             <Post>
-              <Title>주소를 입력해주세요2</Title>
+              <Title>여러 개의 주소를 입력해주세요</Title>
               <DaumPostcode style={postCodeStyle} onComplete={handleComplete} />
             </Post>
-            <Map location={location} restaurantList={restaurantList} mode={mode} />
+            <Map location={location} restaurantList={restaurantList} mode={mode} center={center} />
           </>
         )}
       </MainDiv>
