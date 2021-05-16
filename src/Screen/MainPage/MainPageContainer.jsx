@@ -7,6 +7,7 @@ const MainPageContainer = () => {
   const [isZoneCode, setIsZoneCode] = useState();
   const [location, setLocation] = useState();
   const [restaurantList, setRestaurantList] = useState();
+  const [mode, setMode] = useState('single');
 
   useEffect(() => {
     getLocation();
@@ -15,6 +16,11 @@ const MainPageContainer = () => {
   useEffect(() => {
     getRestaurant();
   }, [location]);
+
+  const onToggleButtonClick = (e) => {
+    const { id } = e.target;
+    setMode(id);
+  };
 
   const handleComplete = async (data) => {
     let fullAddress = data.address;
@@ -58,7 +64,15 @@ const MainPageContainer = () => {
       .then(({ data: { documents } }) => setRestaurantList(documents));
   };
 
-  return <MainPagePresenter handleComplete={handleComplete} location={location} restaurantList={restaurantList} />;
+  return (
+    <MainPagePresenter
+      handleComplete={handleComplete}
+      location={location}
+      restaurantList={restaurantList}
+      mode={mode}
+      onToggleButtonClick={onToggleButtonClick}
+    />
+  );
 };
 
 export default MainPageContainer;
