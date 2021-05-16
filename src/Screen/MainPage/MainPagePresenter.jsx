@@ -40,15 +40,60 @@ const Post = styled.div`
   align-items: center;
 `;
 
-const MainPagePresenter = ({ handleComplete, location, restaurantList }) => {
+const ModeToggleButton = styled.button`
+  width: 200px;
+  height: 50px;
+  font-size: 17px;
+  font-family: 'MaplestoryOTFBold';
+  background-color: white;
+  border: 2px solid black;
+  margin: 20px 0;
+  cursor: pointer;
+`;
+
+const MainPagePresenter = ({ handleComplete, location, restaurantList, mode, onToggleButtonClick, center }) => {
   return (
     <MainPage>
+      <div>
+        <ModeToggleButton
+          onClick={onToggleButtonClick}
+          style={{
+            backgroundColor: mode === 'single' ? '#768fff' : 'white',
+            borderTopLeftRadius: '8px',
+            borderBottomLeftRadius: '8px',
+            borderRight: 'none',
+          }}
+          id="single"
+        >
+          단순 위치 검색
+        </ModeToggleButton>
+        <ModeToggleButton
+          onClick={onToggleButtonClick}
+          style={{ backgroundColor: mode === 'multi' ? '#768fff' : 'white', borderTopRightRadius: '8px', borderBottomRightRadius: '8px' }}
+          id="multi"
+        >
+          다중 위치 검색
+        </ModeToggleButton>
+      </div>
       <MainDiv>
-        <Post>
-          <Title>주소를 입력해주세요</Title>
-          <DaumPostcode style={postCodeStyle} onComplete={handleComplete} />
-        </Post>
-        <Map location={location} restaurantList={restaurantList} />
+        {mode === 'single' && (
+          <>
+            <Post>
+              <Title>주소를 입력해주세요</Title>
+              <DaumPostcode style={postCodeStyle} onComplete={handleComplete} />
+            </Post>
+            <Map location={location} restaurantList={restaurantList} mode={mode} center={center} />
+          </>
+        )}
+        {mode === 'multi' && (
+          <>
+            <Post>
+              <Title>여러 개의 주소를 입력해주세요</Title>
+              <DaumPostcode style={postCodeStyle} onComplete={handleComplete} />
+            </Post>
+            <Map location={location} restaurantList={restaurantList} mode={mode} center={center} />
+          </>
+        )}
       </MainDiv>
     </MainPage>
   );
