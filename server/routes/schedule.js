@@ -4,7 +4,7 @@ const Schedule = require('../models/schedule');
 const InvSchedule = require('../models/invSchedule');
 const db = require('../models');
 
-router.post('/makeSchedule',(req,res,next)=>{ 
+router.post('/makeSchedule', async (req,res,next)=>{ 
     let check = await Schedule.findAll({ //중복된 스케줄 이름 확인
         where: {
             my_id: req.body.user_id,
@@ -36,7 +36,7 @@ router.post('/makeSchedule',(req,res,next)=>{
     res.status(200).send({code: 200, message: '스케줄 등록 완료'});
 })
 
-router.get('/list',(req,res,next)=>{ //내 스케줄 목록
+router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
     let list = await Schedule.findAll({
         where:{
             my_id: req.body.id,
@@ -45,7 +45,7 @@ router.get('/list',(req,res,next)=>{ //내 스케줄 목록
     res.status(200).send({code: 200, ...list});
 })
 
-router.post('/invite',(req,res,next)=>{ //스케줄 초대
+router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     await InvSchedule.create({
         schedule_name: req.body.schedule_name,//스케줄 이름
         my_id: req.body.id,
@@ -54,7 +54,7 @@ router.post('/invite',(req,res,next)=>{ //스케줄 초대
     res.status(200).send({code: 200, message: '스케줄 초대 완료'});
 })
 
-router.get('/invite/list',(req,res,next)=>{ //초대받은 스케줄 목록
+router.get('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목록
     let list = await InvSchedule.findAll({
         where :{
             friend_id: req.body.user_id
@@ -68,7 +68,7 @@ router.get('/invite/list',(req,res,next)=>{ //초대받은 스케줄 목록
     }
 })
 
-router.post('/accept',(req,res,next)=>{ //초대받은 스케줄 수락
+router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
     let inv= await InvSchedule.findOne({
         where:{
             id: req.body.id //스케줄 아이디

@@ -6,7 +6,7 @@ const {Op} = require('sequelize');
 const ReqFriend = require('../models/reqFriends');
 const User = require('../models/user');
 
-router.post('/search',(req,res,next)=>{
+router.post('/search', async (req,res,next)=>{
     let list = await User.findAll({
         attributes:['id','nickname'],
         where:{ 
@@ -23,7 +23,7 @@ router.post('/search',(req,res,next)=>{
 })
 
 
-router.post('/add',(req,res,next)=>{
+router.post('/add', async (req,res,next)=>{
     await ReqFriend.create({
         my_id: req.body.id,
         req_friend_id: req.body.req_id,
@@ -32,7 +32,7 @@ router.post('/add',(req,res,next)=>{
     
 })
 
-router.get('/req/list',(req,res,next)=>{
+router.get('/req/list', async (req,res,next)=>{
     let friend = await ReqFriend.findAll({
         attributes:[my_id],
         where:{
@@ -47,7 +47,7 @@ router.get('/req/list',(req,res,next)=>{
 
 })
 
-router.post('/accept',(req,res,next)=>{
+router.post('/accept', async (req,res,next)=>{
     let friend = await ReqFriend.findOne({
         where:{
             req_friend_id: req.body.id,
