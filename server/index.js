@@ -5,6 +5,14 @@ const cookieParser = require('cookie-parser');
 const {sequelize} = require('./models');
 const passport = require('passport');
 const passportConfig = require('./passport');
+
+
+const joinRouter = require('./routes/join');
+const authRouter = require('./routes/auth');
+const friendRouter = require('./routes/friend');
+const scheduleRouter = require('./routes/schedule');
+
+
 sequelize.sync({ force: false })
   .then(()=>{
     console.log('DB연결 성공')
@@ -30,9 +38,28 @@ app.use(session({
     secure: false,
     sameSite: 'none',
   }
-}))
+}));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use('/auth',authRouter);
+app.use('/join',joinRouter);
+app.use('/friend',friendRouter);
+app.use('/schedule',scheduleRouter);
+
+
+app.use((req, res, next) => {
+  const error =  new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+  error.status = 404;
+  next(error);
+});
+
+
+app.use((err, req, res, next)=> {
+  //에러핸들러
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 app.listen(8000, () => {
     console.log('Example app listening on port 8000!');
