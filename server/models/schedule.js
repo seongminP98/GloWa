@@ -3,19 +3,19 @@ const Sequelize = require('sequelize');
 module.exports = class Schedule extends Sequelize.Model {
     static init(sequelize){
         return super.init({
-            my_id:{
+            my_id:{    //스케줄 만든사람 아이디
                 type:Sequelize.INTEGER,
                 allowNull: false,
             },
-            name:{
+            schedule_name:{    //스케줄 이름
                 type:Sequelize.STRING(20),
                 allowNull: false,
             },
-            date: {
+            date: {    //스케줄 날짜
                 type: Sequelize.DATE,
                 allowNull: false,
             },
-            place: {
+            place: {    //스케줄 장소
                 type: Sequelize.TEXT,
                 allowNull: true,
             }
