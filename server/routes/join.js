@@ -25,7 +25,6 @@ router.post('/nick',async(req,res,next)=>{ //nickname중복확인
 
 router.post('/',async(req,res,next)=>{ //회원가입
     try{
-        const exUser = await User.findOne({where:{user_id: req.body.id}});
         const hash = await bcrypt.hash(req.body.password,12);
         await User.create({
             user_id: req.body.user_id,

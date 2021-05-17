@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const {sequelize} = require('./models');
 const passport = require('passport');
 const passportConfig = require('./passport');
-
+const cors = require('cors');
 
 const joinRouter = require('./routes/join');
 const authRouter = require('./routes/auth');
@@ -28,6 +28,7 @@ passportConfig();
 app.set('port',process.env.PORT || 8000);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
   resave: false,
