@@ -66,7 +66,9 @@ const JoinContainer = () => {
   };
 
   const requestJoin = async () => {
-    await axios.post(`${process.env.REACT_APP_SERVER_URL}/join/id`, { id, password, nickname });
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/join`, { user_id: id, password, nickname })
+      .then((response) => console.log(response.data));
   };
 
   return <JoinPresenter onChange={onChange} onSubmit={onSubmit} {...props} />;
