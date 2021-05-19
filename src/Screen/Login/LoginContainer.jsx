@@ -19,10 +19,13 @@ const LoginContainer = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { id, password }).then((response) => {
-      store.dispatch({ type: 'LOGIN', user: response.data.data });
-      history.push({ pathname: '/' });
-    });
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { id, password })
+      .then((response) => {
+        store.dispatch({ type: 'LOGIN', user: response.data.data });
+        history.push({ pathname: '/' });
+      })
+      .catch((error) => window.alert(error.response.data.message));
   };
 
   return <LoginPresenter onChange={onChange} {...props} onSubmit={onSubmit} />;
