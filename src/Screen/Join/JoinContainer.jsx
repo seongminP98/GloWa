@@ -26,14 +26,10 @@ const JoinContainer = () => {
     if (!isPasswordSame()) return window.alert('비밀번호가 서로 같지 않습니다.');
 
     //id 중복확인
-    const idCheckResult = await isIdAvailable();
-    if (idCheckResult === 2) return window.alert('이미 사용중인 아이디입니다.');
-    if (idCheckResult === 3) return window.alert('오류가 발생하였습니다.');
+    await isIdAvailable();
 
     //nickname 중복확인
-    const nicknameCheckResult = await isNicknameAvailable();
-    if (nicknameCheckResult === 2) return window.alert('이미 사용중인 아이디입니다.');
-    if (nicknameCheckResult === 3) return window.alert('오류가 발생하였습니다.');
+    await isNicknameAvailable();
 
     //회원가입 요청
     await requestJoin();
@@ -44,25 +40,33 @@ const JoinContainer = () => {
   };
 
   const isIdAvailable = async () => {
-    await axios.post(`${process.env.REACT_APP_SERVER_URL}/join/id`, { id }).then((response) => {
-      // 정상
-      if (response.data.code === '200') return 1;
-      // 중복
-      else if (response.data.code === '400') return 2;
-      //오류
-      else return 3;
-    });
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/join/id`, { id })
+      .then((response) => {
+        // 정상
+        if (response.data.code === 200) return 1;
+      })
+      .catch((err) => {
+        // 중복
+        if (err.response.data.code === 400) return window.alert('이미 사용중인 아이디입니다.');
+        //오류
+        else return window.alert('오류가 발생하였습니다.');
+      });
   };
 
   const isNicknameAvailable = async () => {
-    await axios.post(`${process.env.REACT_APP_SERVER_URL}/join/nick`, { nickname }).then((response) => {
-      // 정상
-      if (response.data.code === '200') return 1;
-      // 중복
-      else if (response.data.code === '400') return 2;
-      //오류
-      else return 3;
-    });
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/join/nick`, { nickname })
+      .then((response) => {
+        // 정상
+        if (response.data.code === 200) return 1;
+      })
+      .catch((err) => {
+        // 중복
+        if (err.response.data.code === 400) return window.alert('이미 사용중인 닉네임입니다.');
+        //오류
+        else return window.alert('오류가 발생하였습니다.');
+      });
   };
 
   const requestJoin = async () => {
