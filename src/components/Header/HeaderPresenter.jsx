@@ -41,13 +41,22 @@ const StyledLink = styled(Link)`
   color: #000000;
 `;
 
+const LogoutButton = styled.button`
+  margin: 0px 10px;
+  font-size: 14px;
+  font-weight: 400;
+  border: none;
+  cursor: pointer;
+  background-color: #ffffff;
+`;
+
 const Titlediv = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
 `;
 
-const HeaderPresenter = ({ user }) => {
+const HeaderPresenter = ({ user, onLogoutClick }) => {
   return (
     <Header>
       <Titlediv>
@@ -60,7 +69,7 @@ const HeaderPresenter = ({ user }) => {
       </Titlediv>
       <Menu>
         {user ? (
-          <StyledLink to="join">로그아웃</StyledLink>
+          <LogoutButton onClick={onLogoutClick}>로그아웃</LogoutButton>
         ) : (
           <>
             <StyledLink to="login">로그인</StyledLink>
