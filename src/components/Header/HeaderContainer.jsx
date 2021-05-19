@@ -5,10 +5,7 @@ import HeaderPresenter from './HeaderPresenter';
 const HeaderContainer = () => {
   const [user, setUser] = useState(store.getState().user);
   const sUser = () => setUser(store.getState().user);
-
-  useEffect(() => {
-    sUser();
-  }, []);
+  store.subscribe(sUser);
   return <HeaderPresenter user={user} />;
 };
 
