@@ -8,7 +8,7 @@ const User = require('../models/user');
 router.post('/id',async(req,res,next)=>{ //id중복확인
     const exUser = await User.findOne({where:{user_id: req.body.id}});
     if(!exUser){
-        res.status(200).send({conde: 200, message: '사용가능한 아이디 입니다.'});
+        res.status(200).send({code: 200, message: '사용가능한 아이디 입니다.'});
     } else{
         res.status(400).send({code: 400, message: '이미 사용 중인 아이디입니다.'});
     }
@@ -17,7 +17,7 @@ router.post('/id',async(req,res,next)=>{ //id중복확인
 router.post('/nick',async(req,res,next)=>{ //nickname중복확인
     const exUser = await User.findOne({where:{nickname: req.body.nickname}});
     if(!exUser){
-        res.status(200).send({conde: 200, message: '사용가능한 닉네임 입니다.'});
+        res.status(200).send({code: 200, message: '사용가능한 닉네임 입니다.'});
     } else{
         res.status(400).send({code: 400, message: '이미 사용 중인 닉네임입니다.'});
     }
