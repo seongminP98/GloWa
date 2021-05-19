@@ -12,7 +12,7 @@ module.exports = () =>{
         try{
             const exUser = await User.findOne({where: {user_id: userID}});
             if(exUser){
-                const result = await bcrypt.compare(password, exUser.passport)
+                const result = await bcrypt.compare(password, exUser.password)
                 if(result){
                     done(null,exUser);
                 } else{
