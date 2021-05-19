@@ -16,7 +16,7 @@ router.post('/search', async (req,res,next)=>{
         }
     })
     if(list){
-        res.status(200).send({code: 200, ...list})
+        res.status(200).send({code: 200, result: list})
     } else{
         res.status(400).send({code: 400, message: '찾는 닉네임이 없습니다'})
     }
@@ -40,7 +40,7 @@ router.get('/req/list', async (req,res,next)=>{
         }
     })
     if(friend){
-        res.status(200).send({code:200, ...friend});
+        res.status(200).send({code:200, result: friend});
     } else{
         res.status(400).send({code:400, message: '받은 친구요청이 없습니다.'});
     }
