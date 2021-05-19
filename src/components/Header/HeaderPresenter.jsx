@@ -47,7 +47,7 @@ const Titlediv = styled.div`
   align-items: center;
 `;
 
-const HeaderPresenter = () => {
+const HeaderPresenter = ({ user }) => {
   return (
     <Header>
       <Titlediv>
@@ -59,8 +59,14 @@ const HeaderPresenter = () => {
         </StyledLink>
       </Titlediv>
       <Menu>
-        <StyledLink to="login">로그인</StyledLink>
-        <StyledLink to="join">회원가입</StyledLink>
+        {user ? (
+          <StyledLink to="join">로그아웃</StyledLink>
+        ) : (
+          <>
+            <StyledLink to="login">로그인</StyledLink>
+            <StyledLink to="join">회원가입</StyledLink>
+          </>
+        )}
       </Menu>
     </Header>
   );
