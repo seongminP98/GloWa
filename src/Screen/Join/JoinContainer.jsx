@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+import store from '../../store';
 import JoinPresenter from './JoinPresenter';
 
 const JoinContainer = () => {
@@ -7,6 +9,8 @@ const JoinContainer = () => {
   const [nickname, setNickname] = useState();
   const [password, setPassword] = useState();
   const [passwordCheck, setPasswordCheck] = useState();
+
+  const history = useHistory();
 
   const props = { id, nickname, password, passwordCheck };
 
@@ -72,7 +76,12 @@ const JoinContainer = () => {
   const requestJoin = async () => {
     await axios
       .post(`${process.env.REACT_APP_SERVER_URL}/join`, { user_id: id, password, nickname })
-      .then((response) => console.log(response.data));
+      .then(async (response) => {
+        await store.dispatch({ type: 'LOGIN', user: response.data.dataValues });
+        window.alert('정상적으로 회원가입 되었습니다!');
+        history.push({ pathname: '/' });
+      })
+      .catch((err) => window.alert('에러가 발생하였습니다!'));
   };
 
   return <JoinPresenter onChange={onChange} onSubmit={onSubmit} {...props} />;
