@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {Op} = require('sequelize');
-
+const db = require('../models');
 
 const ReqFriend = require('../models/reqFriends');
 const User = require('../models/user');
@@ -113,6 +113,32 @@ router.post('/reject',async (req,res,next) => {
         }
     })
     res.status(200).send({code:200, message: '거절되었습니다.'});
+})
+
+router.post('/list',async (req,res,next) =>{
+    let friend = await db.sequelize.models.friends.findAll({
+        where:{
+            followingId: req.body.req_id,
+        }
+    })
+    let list = [];
+    if(friend.length>0){
+        for(let i=0; i<friend.length; i++){
+            let f = await User.findOne({
+                attributes:['id', 'nickname'],
+                where:{
+                    id: friend[i].followerId,
+                }
+            })
+            list.push(f);
+        }
+    }
+    if(list){
+        res.status(200).send({code:200, result: list});
+    } else{
+        res.status(400).send({code:400, message: '친구목록이 비어있습니다.'});
+    }
+
 })
 
 module.exports = router;
