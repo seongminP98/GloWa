@@ -27,17 +27,20 @@ router.post('/add', async (req,res,next)=>{
     let alreadyReq = await ReqFriend.findAll({
         where:{
             req_friend_id: req.body.req_id,
+            my_id: req.body.id,
         }
     })
     if(alreadyReq){
         res.status(400).send({code:400, message: '이미 친구요청을 보냈습니다.'});
     }
-
-    let alreadyFriend = await db.sequelize.models.friends.findAll({
-        where:{
-            followingId: req.body.req_id,
-        }
+    let user = await User.findOne({
+        where:{id: req.body.id}
     })
+    let friend = await User.findOne({
+        where:{id: req.body.req_id}
+    })
+    let alreadyFriend = await user.getFollowings(parseInt(friend.id),10);
+
     if(alreadyFriend){
         res.status(400).send({code:400, message: '이미 친구입니다.'});
     }
