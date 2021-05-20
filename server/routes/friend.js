@@ -57,9 +57,8 @@ router.post('/req/list', async (req,res,next)=>{//요청받은 친구목록
         }
     })
     let list = [];
-    let i = 0;
     if(friend.length>0){
-        for(i=0; i<friend.length; i++){
+        for(let i=0; i<friend.length; i++){
             let f = await User.findOne({
                 attributes:['id', 'nickname'],
                 where:{
