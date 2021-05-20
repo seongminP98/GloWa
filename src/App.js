@@ -3,11 +3,13 @@ import Header from './components/Header';
 import MainPage from './Screen/MainPage';
 import Login from './Screen/Login';
 import Join from './Screen/Join';
+import FriendsList from './components/FriendsList';
 
 import store from './store';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 function App() {
   const [isLoginChecked, setIsLoginChecked] = useState(false);
@@ -28,13 +30,27 @@ function App() {
     loginCheck();
   }, []);
 
+  const FriendsDiv = styled.div`
+    position: absolute;
+    right: 15px;
+    top: 50px;
+  `;
+  const MainDiv = styled.div`
+    position: relative;
+  `;
+
   return (
     <>
       {isLoginChecked && (
         <Router className="App">
           <Header />
           <Route exact path="/">
-            <MainPage />
+            <MainDiv>
+              <MainPage />
+              <FriendsDiv>
+                <FriendsList />
+              </FriendsDiv>
+            </MainDiv>
           </Route>
           <Route exact path="/login">
             <Login />
