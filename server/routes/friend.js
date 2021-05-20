@@ -52,21 +52,26 @@ router.post('/add', async (req,res,next)=>{
 
 router.post('/req/list', async (req,res,next)=>{//요청받은 친구목록
     let friend = await ReqFriend.findAll({
-        attributes:[my_id],
         where:{
             req_friend_id: req.body.id
         }
     })
-
-    let f = await User.findAll({
-        attributes:[id, nickname],
-        where:{
-            id: friend.my_id
+    let list = [];
+    let i = 0;
+    if(friend.length>0){
+        for(i=0; i<friend.length; i++){
+            let f = await User.findOne({
+                attributes:['id', 'nickname'],
+                where:{
+                    id: friend[i].my_id
+                }
+            })
+            list.push(f);
         }
-    })
-
-    if(friend){
-        res.status(200).send({code:200, result: f});
+    }
+    
+    if(list){
+        res.status(200).send({code:200, result: list});
     } else{
         res.status(400).send({code:400, message: '받은 친구요청이 없습니다.'});
     }
