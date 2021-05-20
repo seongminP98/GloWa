@@ -30,19 +30,19 @@ router.post('/add', async (req,res,next)=>{
             my_id: req.body.id,
         }
     })
-    if(alreadyReq){
-        res.status(400).send({code:400, message: '이미 친구요청을 보냈습니다.'});
+    
+    if(Array.isArray(alreadyReq) && alreadyReq.length){
+        return res.status(400).send({code:400, message: '이미 친구요청을 보냈습니다.'});
     }
     let user = await User.findOne({
         where:{id: req.body.id}
     })
-    let friend = await User.findOne({
-        where:{id: req.body.req_id}
-    })
-    let alreadyFriend = await user.getFollowings(parseInt(friend.id),10);
 
-    if(alreadyFriend){
-        res.status(400).send({code:400, message: '이미 친구입니다.'});
+    
+    let alreadyFriend = await user.getFollowings();
+
+    if(Array.isArray(alreadyFriend) && alreadyFriend.length){
+        return res.status(400).send({code:400, message: '이미 친구입니다.'});
     }
 
     await ReqFriend.create({
@@ -124,6 +124,7 @@ router.post('/list',async (req,res,next) =>{
             followingId: req.body.req_id,
         }
     })
+
     let list = [];
     if(friend.length>0){
         for(let i=0; i<friend.length; i++){
