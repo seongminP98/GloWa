@@ -6,6 +6,7 @@ import { useHistory } from 'react-router';
 
 const FriendSearchResultContainer = ({ id: req_id, nickname, is_req }) => {
   const history = useHistory();
+  const user = store.getState().user;
 
   const onAcceptButtonClick = async (e) => {
     e.preventDefault();
@@ -38,6 +39,7 @@ const FriendSearchResultContainer = ({ id: req_id, nickname, is_req }) => {
       FriendAddbuttonClick={FriendAddbuttonClick}
       is_req={is_req}
       onAcceptButtonClick={onAcceptButtonClick}
+      user={user}
     />
   );
 };
