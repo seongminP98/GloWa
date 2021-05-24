@@ -34,14 +34,32 @@ router.post('/add', async (req,res,next)=>{
     if(Array.isArray(alreadyReq) && alreadyReq.length){
         return res.status(400).send({code:400, message: '이미 친구요청을 보냈습니다.'});
     }
+    let alreadyRes = await ReqFriend.findAll({
+        where:{
+            req_friend_id: req.body.id,
+            my_id: req.body.req_id,
+        }
+    })
+    if(Array.isArray(alreadyRes) && alreadyRes.length){
+        return res.status(400).send({code:400, message: '상대한테 친구요청을 받은 상태입니다.'});
+    }
+
+
     let user = await User.findOne({
         where:{id: req.body.id}
     })
 
-    
     let alreadyFriend = await user.getFollowings();
-
+    let check = false;
     if(Array.isArray(alreadyFriend) && alreadyFriend.length){
+        for(let i=0; i<alreadyFriend.length; i++){
+            if(alreadyFriend[i].dataValues.id === req.body.req_id){
+                check = true;
+            }
+        }
+    }
+
+    if(check){
         return res.status(400).send({code:400, message: '이미 친구입니다.'});
     }
 
@@ -121,22 +139,22 @@ router.post('/reject',async (req,res,next) => {
 
 router.post('/list',async (req,res,next) =>{
     let user = await User.findOne({
-        where:{id: req.body.id}
+        where:{id: req.body.req_id}
     })
     let friend = await user.getFollowings();
-    console.log(friend);
     let list = [];
-    // if(friend.length>0){
-    //     for(let i=0; i<friend.length; i++){
-    //         let f = await User.findOne({
-    //             attributes:['id', 'nickname'],
-    //             where:{
-    //                 id: friend[i].followingId,
-    //             }
-    //         })
-    //         list.push(f);
-    //     }
-    // }
+    if(friend.length>0){
+        for(let i=0; i<friend.length; i++){
+            let f = await User.findOne({
+                attributes:['id', 'nickname'],
+                where:{
+                    id: friend[i].dataValues.id,
+                }
+            })
+            list.push(f.dataValues);
+        }
+    }
+
     if(Array.isArray(list) && list.length){
         res.status(200).send({code:200, result: list});
     } else{

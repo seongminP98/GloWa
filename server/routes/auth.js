@@ -10,18 +10,22 @@ router.post('/login',(req, res, next)=>{
         if(!user){
             return res.status(400).send({code: 400, message: info.message})
         }
-        return req.login(user,(loginError)=>{
+        req.login(user,(loginError)=>{
             if(loginError){
-                console.log(loginError);
                 return next(loginError);
             }
-            return res.status(200).send({code: 200, data: user});
-            
+            return req.session.save((err)=>{
+                if(err){
+                    return next(err);
+                }
+                return res.status(200).send({code: 200, data: user});
+            })
         })
     })(req,res,next);
 })
 
 router.get('/login',(req,res,next)=>{
+    console.log('get방식',req.user);
     if (req.user) {
         res.status(200).send({ code: 200, data: req.user });
     } else {
