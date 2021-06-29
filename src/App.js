@@ -3,6 +3,7 @@ import Header from './components/Header';
 import MainPage from './Screen/MainPage';
 import Login from './Screen/Login';
 import Join from './Screen/Join';
+import Schedule from './Screen/Schedule';
 import FriendsList from './components/FriendsList';
 
 import store from './store';
@@ -61,6 +62,9 @@ function App() {
                 </FriendsDiv>
               </MainDiv>
             </MainMainDiv>
+          </Route>
+          <Route exact path="/schedule">
+            <Schedule />
           </Route>
           <Route exact path="/login">
             <Login />
