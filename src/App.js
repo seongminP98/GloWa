@@ -18,7 +18,7 @@ function App() {
       .get(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { withCredentials: true })
       .then(async (result) => {
         console.log(result);
-        await store.dispatch({ type: 'LOGIN', user: result.data });
+        await store.dispatch({ type: 'LOGIN', user: result.data.data });
         setIsLoginChecked(true);
       })
       .catch((error) => {
