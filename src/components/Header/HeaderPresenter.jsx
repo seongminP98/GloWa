@@ -79,7 +79,7 @@ const HeaderPresenter = ({ user, onLogoutClick, scheduleModeToggleButton }) => {
       <Menu>
         {user ? (
           <>
-            <ScheduleModeButton onClick={scheduleModeToggleButton}>스케쥴관리</ScheduleModeButton>
+            <ScheduleModeButton onClick={scheduleModeToggleButton}>일정관리</ScheduleModeButton>
             <LogoutButton onClick={onLogoutClick}>로그아웃</LogoutButton>
           </>
         ) : (

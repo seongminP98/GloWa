@@ -9,8 +9,12 @@ const MapContent = styled.div`
   position: relative;
   top: 40px;
 `;
+const SmallMapContent = styled.div`
+  min-width: 450px;
+  height: 450px;
+`;
 
-const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, getYposAverage, center }) => {
+const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, getYposAverage, center, size }) => {
   const infoWindow = (p) => `<div style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; width : 300px">
   <img style="width : 100%; height : 150px"src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fGZvb2R8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"/>
     <div style="padding :9px">
@@ -187,7 +191,7 @@ const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, g
         break;
     }
   });
-  return <MapContent id="myMap" />;
+  return size ? <SmallMapContent id="myMap" /> : <MapContent id="myMap" />;
 };
 
 export default MapContentPresenter;
