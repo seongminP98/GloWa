@@ -11,13 +11,11 @@ module.exports = () => {
     
     passport.deserializeUser((id, done) => {
         console.log("deserializeUser");
-        try{
-            const user = User.findOne({where: {id: id}})
-            done(null, user);
-        }  catch(error){
-            console.log(error);
-            done(error);
-        }
+        User.findOne({
+            where: {id: id},
+        })
+        .then((user) => done(null, user))
+        .catch((err) => done(err));
     });
     
     local();

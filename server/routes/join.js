@@ -26,12 +26,12 @@ router.post('/nick',async(req,res,next)=>{ //nickname중복확인
 router.post('/',async(req,res,next)=>{ //회원가입 
     try{
         const hash = await bcrypt.hash(req.body.password,12);
-        await User.create({
+        const user = await User.create({
             user_id: req.body.user_id,
             nickname: req.body.nickname,
             password: hash,
-        });      
-        const user = await User.findOne({user_id: req.body.id});
+        });
+
         req.login(user,(err)=>{         
             return res.status(200).send({code: 200, ...user});
         })
