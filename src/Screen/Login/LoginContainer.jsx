@@ -20,7 +20,7 @@ const LoginContainer = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { id, password })
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { id, password }, { withCredentials: true })
       .then((response) => {
         store.dispatch({ type: 'LOGIN', user: response.data.data });
         history.push({ pathname: '/' });
