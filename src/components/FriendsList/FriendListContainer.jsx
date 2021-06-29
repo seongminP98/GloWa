@@ -14,9 +14,14 @@ const FriendsListContainer = () => {
     getFriendList();
   }, []);
 
-  const modeToggleButton = (e) => {
+  const basicModeToggleButton = (e) => {
     e.preventDefault();
     setMode('basic');
+  };
+
+  const friendListModeToggleButton = (e) => {
+    e.preventDefault();
+    setMode('friendList');
   };
 
   const getFriendReq = async () => {
@@ -56,8 +61,9 @@ const FriendsListContainer = () => {
     <FriendsListPresenter
       onSearchSubmit={onSearchSubmit}
       searchedList={searchedList}
+      friendList={friendList}
       mode={mode}
-      modeToggleButton={modeToggleButton}
+      basicModeToggleButton={basicModeToggleButton}
       friendReqList={friendReqList}
     />
   );

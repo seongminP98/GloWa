@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import FriendSearchResult from '../FriendSearchResult';
 
-const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, modeToggleButton, friendReqList }) => {
+const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeToggleButton, friendReqList, friendList }) => {
   const FriendsListMainDiv = styled.div`
     padding: 10px;
     width: 300px;
@@ -67,18 +67,32 @@ const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, modeToggleBu
           <SearchFriendsInput id="req_nickname" placeholder="닉네임을 입력해주세요" />
           <ButtonDiv>
             <SearchFriendsButton type="submit">검색</SearchFriendsButton>
-            <SearchCancelButton onClick={modeToggleButton}>목록보기</SearchCancelButton>
+            <SearchCancelButton onClick={basicModeToggleButton}>목록보기</SearchCancelButton>
           </ButtonDiv>
         </SearchFriendsForm>
         {mode === 'basic' ? (
-          <EmptyList>친구가 없습니다 ..</EmptyList>
-        ) : searchedList.length !== 0 ? (
+          //친구목록 모드
+          friendList.length !== 0 ? (
+            //친구목록이 비어있지 않은 경우
+            <div>
+              {friendList.map((r, index) => (
+                <FriendSearchResult key={index} id={r.id} nickname={r.nickname} />
+              ))}
+            </div>
+          ) : (
+            //친구목록이 비어있는 경우
+            <EmptyList>친구가 없습니다 ..</EmptyList>
+          )
+        ) : //친구 검색 모드
+        searchedList.length !== 0 ? (
+          //검색 결과가 있는 경우
           <div>
             {searchedList.map((r, index) => (
               <FriendSearchResult key={index} id={r.id} nickname={r.nickname} />
             ))}
           </div>
         ) : (
+          //검색 결과가 없는 경우
           <EmptyList>검색 결과가 없습니다.</EmptyList>
         )}
       </MainDiv>
