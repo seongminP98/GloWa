@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FriendSearchResult from '../FriendSearchResult';
+import FriednsResult from '../FriendsResult';
 
 const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeToggleButton, friendReqList, friendList }) => {
   const FriendsListMainDiv = styled.div`
@@ -59,6 +60,7 @@ const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeTog
     height: 25%;
   `;
 
+  console.log(friendList);
   return (
     <FriendsListMainDiv>
       <MainDiv>
@@ -72,11 +74,11 @@ const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeTog
         </SearchFriendsForm>
         {mode === 'basic' ? (
           //친구목록 모드
-          friendList.length !== 0 ? (
+          friendList?.length !== 0 ? (
             //친구목록이 비어있지 않은 경우
             <div>
-              {friendList.map((r, index) => (
-                <FriendSearchResult key={index} id={r.id} nickname={r.nickname} />
+              {friendList?.map((r, index) => (
+                <FriednsResult key={index} id={r.id} nickname={r.nickname} />
               ))}
             </div>
           ) : (
@@ -84,10 +86,10 @@ const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeTog
             <EmptyList>친구가 없습니다 ..</EmptyList>
           )
         ) : //친구 검색 모드
-        searchedList.length !== 0 ? (
+        searchedList?.length !== 0 ? (
           //검색 결과가 있는 경우
           <div>
-            {searchedList.map((r, index) => (
+            {searchedList?.map((r, index) => (
               <FriendSearchResult key={index} id={r.id} nickname={r.nickname} />
             ))}
           </div>

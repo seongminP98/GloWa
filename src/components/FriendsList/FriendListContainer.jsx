@@ -39,8 +39,7 @@ const FriendsListContainer = () => {
     await axios
       .post(`${process.env.REACT_APP_SERVER_URL}/friend/list`, { req_id: user.id }, { withCredentials: true })
       .then((response) => {
-        setFriendList();
-        console.log(response.data.result);
+        setFriendList(response.data.result);
       })
       .catch((err) => console.error(err));
   };
