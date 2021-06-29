@@ -4,7 +4,7 @@ import FriendSearchResultPresenter from './FriendSearchResultPresenter';
 import store from '../../store';
 import { useHistory } from 'react-router';
 
-const FriendSearchResultContainer = ({ id: req_id, nickname, is_req }) => {
+const FriendSearchResultContainer = ({ id: req_id, nickname, is_req, refreshList }) => {
   const history = useHistory();
   const user = store.getState().user;
 
@@ -15,7 +15,10 @@ const FriendSearchResultContainer = ({ id: req_id, nickname, is_req }) => {
     const req_id = e.target.parentNode.req_id.value;
     await axios
       .post(`${process.env.REACT_APP_SERVER_URL}/friend/accept`, { id: user.id, req_id })
-      .then(() => console.log('정상적으로 친구 추가되었습니다!'))
+      .then(() => {
+        refreshList();
+        window.alert('정상적으로 친구 추가되었습니다!');
+      })
       .catch((err) => window.alert('에러가 발생했습니다 !'));
   };
 

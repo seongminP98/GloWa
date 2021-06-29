@@ -14,6 +14,11 @@ const FriendsListContainer = () => {
     getFriendList();
   }, []);
 
+  const refreshList = () => {
+    getFriendReq();
+    getFriendList();
+  };
+
   const basicModeToggleButton = (e) => {
     e.preventDefault();
     setMode('basic');
@@ -64,6 +69,7 @@ const FriendsListContainer = () => {
       mode={mode}
       basicModeToggleButton={basicModeToggleButton}
       friendReqList={friendReqList}
+      refreshList={refreshList}
     />
   );
 };
