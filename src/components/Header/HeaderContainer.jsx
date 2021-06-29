@@ -11,7 +11,10 @@ const HeaderContainer = () => {
   const onLogoutClick = async () => {
     await axios
       .get(`${process.env.REACT_APP_SERVER_URL}/auth/logout`, { withCredentials: true })
-      .then(() => store.dispatch({ type: 'LOGOUT' }))
+      .then(() => {
+        store.dispatch({ type: 'LOGOUT' });
+        window.location.href = 'http://localhost:3000';
+      })
       .catch((error) => console.error(error));
   };
 

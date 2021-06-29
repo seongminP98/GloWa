@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FriendSearchResult from '../FriendSearchResult';
 import FriednsResult from '../FriendsResult';
 
-const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeToggleButton, friendReqList, friendList }) => {
+const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeToggleButton, friendReqList, friendList, refreshList }) => {
   const FriendsListMainDiv = styled.div`
     padding: 10px;
     width: 300px;
@@ -101,7 +101,9 @@ const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeTog
       <ReqDiv>
         <FriendsListTitle>친구 요청 목록</FriendsListTitle>
         {friendReqList.length !== 0 ? (
-          friendReqList.map((r, index) => <FriendSearchResult key={index} id={r.id} nickname={r.nickname} is_req={true} />)
+          friendReqList.map((r, index) => (
+            <FriendSearchResult refreshList={refreshList} key={index} id={r.id} nickname={r.nickname} is_req={true} />
+          ))
         ) : (
           <div>친구 요청이 없습니다.</div>
         )}
