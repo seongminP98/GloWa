@@ -27,19 +27,40 @@ router.post('/add', async (req,res,next)=>{
     let alreadyReq = await ReqFriend.findAll({
         where:{
             req_friend_id: req.body.req_id,
+            my_id: req.body.id,
         }
     })
-    if(alreadyReq){
-        res.status(400).send({code:400, message: '이미 친구요청을 보냈습니다.'});
+    
+    if(Array.isArray(alreadyReq) && alreadyReq.length){
+        return res.status(400).send({code:400, message: '이미 친구요청을 보냈습니다.'});
+    }
+    let alreadyRes = await ReqFriend.findAll({
+        where:{
+            req_friend_id: req.body.id,
+            my_id: req.body.req_id,
+        }
+    })
+    if(Array.isArray(alreadyRes) && alreadyRes.length){
+        return res.status(400).send({code:400, message: '상대한테 친구요청을 받은 상태입니다.'});
     }
 
-    let alreadyFriend = await db.sequelize.models.friends.findAll({
-        where:{
-            followingId: req.body.req_id,
-        }
+
+    let user = await User.findOne({
+        where:{id: req.body.id}
     })
-    if(alreadyFriend){
-        res.status(400).send({code:400, message: '이미 친구입니다.'});
+
+    let alreadyFriend = await user.getFollowings();
+    let check = false;
+    if(Array.isArray(alreadyFriend) && alreadyFriend.length){
+        for(let i=0; i<alreadyFriend.length; i++){
+            if(alreadyFriend[i].dataValues.id === req.body.req_id){
+                check = true;
+            }
+        }
+    }
+
+    if(check){
+        return res.status(400).send({code:400, message: '이미 친구입니다.'});
     }
 
     await ReqFriend.create({
@@ -59,6 +80,7 @@ router.post('/req/list', async (req,res,next)=>{//요청받은 친구목록
     let list = [];
     if(friend.length>0){
         for(let i=0; i<friend.length; i++){
+            console.log(friend[i]);
             let f = await User.findOne({
                 attributes:['id', 'nickname'],
                 where:{
@@ -89,17 +111,16 @@ router.post('/accept', async (req,res,next)=>{
             id: friend.req_friend_id
         }
     })
+
+
     await myId.addFollowings(parseInt(friend.my_id,10));
-    let fId = await User.findOne({
-        where:{
-            id: friend.my_id
-        }
-    })
-    await fId.addFollowers(parseInt(friend.req_friend_id,10))
+    await myId.addFollowers(parseInt(friend.my_id,10));
+
     
     await ReqFriend.destroy({
         where :{
-            my_id: req.body.req_id //나한테 친구요청보낸 사람의 아이디
+            my_id: req.body.req_id, //나한테 친구요청보낸 사람의 아이디
+            req_friend_id: req.body.id
         }
     })
     res.status(200).send({code:200, message: '친구요청 수락 완료'});
@@ -109,31 +130,32 @@ router.post('/accept', async (req,res,next)=>{
 router.post('/reject',async (req,res,next) => {
     await ReqFriend.destroy({
         where :{
-            my_id: req.body.req_id //나한테 친구요청보낸 사람의 아이디
+            my_id: req.body.req_id, //나한테 친구요청보낸 사람의 아이디
+            req_friend_id: req.body.id
         }
     })
     res.status(200).send({code:200, message: '거절되었습니다.'});
 })
 
 router.post('/list',async (req,res,next) =>{
-    let friend = await db.sequelize.models.friends.findAll({
-        where:{
-            followingId: req.body.req_id,
-        }
+    let user = await User.findOne({
+        where:{id: req.body.req_id}
     })
+    let friend = await user.getFollowings();
     let list = [];
     if(friend.length>0){
         for(let i=0; i<friend.length; i++){
             let f = await User.findOne({
                 attributes:['id', 'nickname'],
                 where:{
-                    id: friend[i].followerId,
+                    id: friend[i].dataValues.id,
                 }
             })
-            list.push(f);
+            list.push(f.dataValues);
         }
     }
-    if(list){
+
+    if(Array.isArray(list) && list.length){
         res.status(200).send({code:200, result: list});
     } else{
         res.status(400).send({code:400, message: '친구목록이 비어있습니다.'});
