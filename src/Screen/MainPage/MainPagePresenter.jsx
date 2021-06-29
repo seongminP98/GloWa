@@ -5,7 +5,6 @@ import Map from '../../components/MapContent';
 
 // 메인 페이지 공간
 const MainPage = styled.div`
-  min-width: 1000px;
   height: 700px;
   display: flex;
   flex-direction: column;
