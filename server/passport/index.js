@@ -15,18 +15,9 @@ module.exports = () => {
         console.log(err);
         done(err);
       });
+  });
 
-    
-    passport.deserializeUser((id, done) => {
-        console.log("deserializeUser");
-        User.findOne({
-            where: {id: id},
-        })
-        .then((user) => done(null, user))
-        .catch((err) => done(err));
-    });
-    
-    local();
+  local();
 };
 
 
