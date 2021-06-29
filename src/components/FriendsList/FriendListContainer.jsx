@@ -14,9 +14,14 @@ const FriendsListContainer = () => {
     getFriendList();
   }, []);
 
-  const modeToggleButton = (e) => {
+  const basicModeToggleButton = (e) => {
     e.preventDefault();
     setMode('basic');
+  };
+
+  const friendListModeToggleButton = (e) => {
+    e.preventDefault();
+    setMode('friendList');
   };
 
   const getFriendReq = async () => {
@@ -34,8 +39,7 @@ const FriendsListContainer = () => {
     await axios
       .post(`${process.env.REACT_APP_SERVER_URL}/friend/list`, { req_id: user.id }, { withCredentials: true })
       .then((response) => {
-        setFriendList();
-        console.log(response.data.result);
+        setFriendList(response.data.result);
       })
       .catch((err) => console.error(err));
   };
@@ -56,8 +60,9 @@ const FriendsListContainer = () => {
     <FriendsListPresenter
       onSearchSubmit={onSearchSubmit}
       searchedList={searchedList}
+      friendList={friendList}
       mode={mode}
-      modeToggleButton={modeToggleButton}
+      basicModeToggleButton={basicModeToggleButton}
       friendReqList={friendReqList}
     />
   );

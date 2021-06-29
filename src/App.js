@@ -18,7 +18,8 @@ function App() {
       .get(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { withCredentials: true })
       .then(async (result) => {
         console.log(result);
-        await store.dispatch({ type: 'LOGIN', user: result.data.dataValues });
+        await store.dispatch({ type: 'LOGIN', user: result.data.data });
+        setIsLoginChecked(true);
       })
       .catch((error) => {
         console.log(error.response.data);
@@ -31,12 +32,19 @@ function App() {
   }, []);
 
   const FriendsDiv = styled.div`
-    position: absolute;
-    right: 15px;
+    margin-left: 80px;
+    position: relative;
     top: 50px;
   `;
+  const MainMainDiv = styled.div`
+    min-width: 1400px;
+    display: flex;
+    justify-content: center;
+  `;
   const MainDiv = styled.div`
-    position: relative;
+    display: flex;
+    justify-content: space-around;
+    width: 1400px;
   `;
 
   return (
@@ -45,12 +53,14 @@ function App() {
         <Router className="App">
           <Header />
           <Route exact path="/">
-            <MainDiv>
-              <MainPage />
-              <FriendsDiv>
-                <FriendsList />
-              </FriendsDiv>
-            </MainDiv>
+            <MainMainDiv>
+              <MainDiv>
+                <MainPage />
+                <FriendsDiv>
+                  <FriendsList />
+                </FriendsDiv>
+              </MainDiv>
+            </MainMainDiv>
           </Route>
           <Route exact path="/login">
             <Login />
