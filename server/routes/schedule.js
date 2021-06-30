@@ -186,5 +186,14 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
     res.status(200).send({code: 200, message: '스케줄 수락 완료'});
 })
 
+router.delete('/delete', async(req,res,next)=>{ //스케줄 만든사람이 스케줄 삭제
+    await Schedule.destroy({
+        where:{
+            id : req.body.schedule_id
+        }
+    })
+    res.status(200).send({code: 200, message: '스케줄 삭제 완료'});
+})
+
 
 module.exports = router;
