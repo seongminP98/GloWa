@@ -165,7 +165,7 @@ router.get('/list',async (req,res,next) =>{
 
 router.delete('/delete',async (req,res,next) =>{
     let user = await User.findOne({
-        where:{id: req.body.id}
+        where:{id: req.user.id}
     })
     let friend = await User.findOne({
         where:{id: req.body.friend_id}
