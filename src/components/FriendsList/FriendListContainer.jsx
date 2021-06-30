@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import store from '../../store';
 import FriendsListPresenter from './FriendsListPresenter';
 
@@ -8,6 +9,8 @@ const FriendsListContainer = () => {
   const [mode, setMode] = useState('basic');
   const [friendReqList, setFriendReqList] = useState([]);
   const [friendList, setFriendList] = useState([]);
+  const user = store.getState().user;
+  const history = useHistory();
 
   useEffect(() => {
     getFriendReq();
@@ -61,12 +64,18 @@ const FriendsListContainer = () => {
       .catch((err) => console.error(err));
   };
 
+  const redirectToLoginPage = () => {
+    history.push({ pathname: '/login' });
+  };
+
   return (
     <FriendsListPresenter
+      user={user}
       onSearchSubmit={onSearchSubmit}
       searchedList={searchedList}
       friendList={friendList}
       mode={mode}
+      redirectToLoginPage={redirectToLoginPage}
       basicModeToggleButton={basicModeToggleButton}
       friendReqList={friendReqList}
       refreshList={refreshList}

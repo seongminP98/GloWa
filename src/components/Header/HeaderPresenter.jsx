@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Header = styled.header`
   height: 120px;
+
   display: flex;
   justify-content: space-between;
 `;
@@ -35,14 +36,26 @@ const Menu = styled.div`
 
 const StyledLink = styled(Link)`
   margin: 0px 10px;
-  font-size: 14px;
+  font-size: 17px;
+  font-family: 'MaplestoryOTFBold';
   font-weight: 400;
   text-decoration: none;
   color: #000000;
 `;
 
+const ScheduleModeButton = styled.button`
+  margin: 0px 10px;
+  font-size: 14px;
+  font-weight: 400;
+  border: none;
+  font-family: 'MaplestoryOTFBold';
+  cursor: pointer;
+  background-color: #ffffff;
+`;
+
 const LogoutButton = styled.button`
   margin: 0px 10px;
+  font-family: 'MaplestoryOTFBold';
   font-size: 14px;
   font-weight: 400;
   border: none;
@@ -56,7 +69,7 @@ const Titlediv = styled.div`
   align-items: center;
 `;
 
-const HeaderPresenter = ({ user, onLogoutClick }) => {
+const HeaderPresenter = ({ user, onLogoutClick, scheduleModeToggleButton }) => {
   return (
     <Header>
       <Titlediv>
@@ -69,7 +82,10 @@ const HeaderPresenter = ({ user, onLogoutClick }) => {
       </Titlediv>
       <Menu>
         {user ? (
-          <LogoutButton onClick={onLogoutClick}>로그아웃</LogoutButton>
+          <>
+            <ScheduleModeButton onClick={scheduleModeToggleButton}>일정관리</ScheduleModeButton>
+            <LogoutButton onClick={onLogoutClick}>로그아웃</LogoutButton>
+          </>
         ) : (
           <>
             <StyledLink to="login">로그인</StyledLink>

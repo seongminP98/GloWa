@@ -3,6 +3,7 @@ import Header from './components/Header';
 import MainPage from './Screen/MainPage';
 import Login from './Screen/Login';
 import Join from './Screen/Join';
+import Schedule from './Screen/Schedule';
 import FriendsList from './components/FriendsList';
 
 import store from './store';
@@ -17,12 +18,10 @@ function App() {
     await axios
       .get(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { withCredentials: true })
       .then(async (result) => {
-        console.log(result);
         await store.dispatch({ type: 'LOGIN', user: result.data.data });
         setIsLoginChecked(true);
       })
       .catch((error) => {
-        console.log(error.response.data);
         setIsLoginChecked(true);
       });
   };
@@ -61,6 +60,9 @@ function App() {
                 </FriendsDiv>
               </MainDiv>
             </MainMainDiv>
+          </Route>
+          <Route exact path="/schedule">
+            <Schedule />
           </Route>
           <Route exact path="/login">
             <Login />
