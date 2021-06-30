@@ -33,11 +33,13 @@ module.exports = class User extends Sequelize.Model {
             foreignKey: 'followingId',
             as: 'Followers',
             through: 'Friends',
+            onDelete: 'cascade',
         });
         db.User.belongsToMany(db.User,{
             foreignKey: 'followerId',
             as: 'Followings',
             through: 'Friends',
+            onDelete: 'cascade',
         });
         db.User.belongsToMany(db.Schedule, {through: 'Schedulemanage'})
     }

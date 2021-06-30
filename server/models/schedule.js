@@ -31,6 +31,9 @@ module.exports = class Schedule extends Sequelize.Model {
         })
     }
     static associate(db){
-        db.Schedule.belongsToMany(db.User, {through: 'Schedulemanage'});
+        db.Schedule.belongsToMany(db.User, {
+            through: 'Schedulemanage',
+            onDelete: 'cascade',
+        });
     }
 }
