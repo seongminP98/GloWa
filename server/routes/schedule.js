@@ -187,12 +187,23 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
 })
 
 router.delete('/delete', async(req,res,next)=>{ //스케줄 만든사람이 스케줄 삭제
-    await Schedule.destroy({
+    let schedule = await Schedule.findOne({
         where:{
             id : req.body.schedule_id
         }
     })
-    res.status(200).send({code: 200, message: '스케줄 삭제 완료'});
+    if(schedule.dataValues.my_id === req.user.id){
+        await Schedule.destroy({
+            where:{
+                id : req.body.schedule_id,
+                my_id : req.user.id
+            }
+        })
+        res.status(200).send({code: 200, message: '스케줄 삭제 완료'});
+    } else{
+        res.status(200).send({code: 200, message: '이 스케줄을 삭제할 권한이 없습니다.'});
+    }
+    
 })
 
 
