@@ -163,4 +163,20 @@ router.get('/list',async (req,res,next) =>{
 
 })
 
+router.delete('/delete',async (req,res,next) =>{
+    let user = await User.findOne({
+        where:{id: req.body.id}
+    })
+    let friend = await User.findOne({
+        where:{id: req.body.friend_id}
+    })
+    
+    await user.removeFollowings(friend);
+    await friend.removeFollowings(user);
+
+
+    res.status(200).send({code:200, message:'삭제되었습니다.'});
+    
+})
+
 module.exports = router;
