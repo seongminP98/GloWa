@@ -1,87 +1,84 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import dateF from 'date-and-time';
 import SchedulePresenter from './SchedulePresenter';
 import store from '../../store';
-const ScheduleContainer = () => {
-  const [scheduleList, seScheduleList] = useState([]);
-  const [isAddress, setIsAddress] = useState();
-  const [isZoneCode, setIsZoneCode] = useState();
-  const [location, setLocation] = useState([]);
-  const [center, setCenter] = useState();
 
+const ScheduleContainer = () => {
+  const [scheduleList, setScheduleList] = useState([]);
+  const [place, setPlace] = useState('');
+  const [name, setName] = useState('');
+  const [date, setDate] = useState(dateF.format(new Date(), 'YYYY-MM-DD'));
+  const [time, setTime] = useState(dateF.format(new Date(), 'HH:MM'));
+  const [mode, setMode] = useState('list');
+  const [isValidationChecked, setIsValidationChecked] = useState(false);
   const user = store.getState().user;
 
-  useEffect(() => {
-    getLocation();
-  }, [isAddress]);
-
-  useEffect(() => {
-    setCenter({ x: getXposAverage(location), y: getYposAverage(location) });
-  }, [location]);
-
-  const getXposAverage = (arr) => {
-    let result = 0;
-    arr.forEach((p) => (result += +p.x));
-    return result / arr.length;
+  const onChange = (e) => {
+    const value = e.target.value;
+    const elemntId = e.target.id;
+    setIsValidationChecked(false); // form 검사 이후에 다시 value를 변경하였을 때 다시 검사를 해야하므로 false로 변경
+    if (elemntId === 'name') setName(value);
+    else if (elemntId === 'date') setDate(value);
+    else if (elemntId === 'time') setTime(value);
+    else setPlace(value);
   };
 
-  const getYposAverage = (arr) => {
-    let result = 0;
-    arr.forEach((p) => (result += +p.y));
-    return result / arr.length;
-  };
-
-  const removeLocationOverlap = (arr) => {
-    // 위치에 중복이 있는 경우 제거 함수
-    const temp = new Set(arr);
-    const result = [...temp];
-    return result;
-  };
-
-  const getLocation = async () => {
-    await axios
-      .get(`https://dapi.kakao.com/v2/local/search/address.json?analyze_type=similar&page=1&size=10&query=${isAddress}`, {
-        headers: {
-          Authorization: `KakaoAK ${process.env.REACT_APP_REST_API_KEY}`,
-        },
-      })
-      .then(({ data: { documents } }) => {
-        let locationList = removeLocationOverlap([...location, { x: documents[0]?.x, y: documents[0]?.y }]); // 위치 중복을 제거한 위치 배열
-        locationList.filter((a) => a.x !== undefined);
-        setLocation(locationList);
-      });
+  const onModeTogglebuttonClick = () => {
+    if (mode === 'list') setMode('create');
+    else if (mode === 'create') setMode('list');
   };
 
   const getScheduleList = async () => {
     await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/schedule/list`, { id: user.id }, { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/schedule/list`, { withCredentials: true })
+      .then((response) => setScheduleList(response.data.result))
+      .catch((err) => console.error(err));
+  };
+
+  const checkValidation = () => {
+    // 일정 추가 form 검사 함수 (제목 및 장소 입력 확인)
+    if (name === '') return window.alert('일정 제목을 입력해주세요');
+    if (place === '') return window.alert('장소를 입력해주세요');
+    setIsValidationChecked(true);
+    return isValidationChecked;
+  };
+
+  const reqCreateSchedule = () => {
+    if (!isValidationChecked) return;
+    axios
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/schedule/makeSchedule`,
+        { name, place, date: `${date + ' ' + time}` },
+        { withCredentials: true }
+      )
       .then((response) => console.log(response))
       .catch((err) => console.error(err));
   };
 
-  const handleComplete = async (data) => {
-    let fullAddress = data.address;
-    let extraAddress = '';
-
-    if (data.addressType === 'R') {
-      if (data.bname !== '') {
-        extraAddress += data.bname;
-      }
-      if (data.buildingName !== '') {
-        extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
-    }
-    setIsZoneCode(data.zonecode);
-    setIsAddress(fullAddress);
+  const onSubmitButtonClick = async (e) => {
+    e.preventDefault();
+    if (checkValidation()) reqCreateSchedule();
   };
 
   useEffect(() => {
     getScheduleList();
   }, []);
 
-  return <SchedulePresenter handleComplete={handleComplete} location={location} center={center} />;
+  return (
+    <SchedulePresenter
+      onChange={onChange}
+      mode={mode}
+      name={name}
+      time={time}
+      place={place}
+      date={date}
+      onSubmitButtonClick={onSubmitButtonClick}
+      onModeTogglebuttonClick={onModeTogglebuttonClick}
+      scheduleList={scheduleList}
+    />
+  );
 };
 
 export default ScheduleContainer;

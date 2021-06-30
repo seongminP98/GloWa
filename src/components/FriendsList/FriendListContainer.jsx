@@ -36,7 +36,7 @@ const FriendsListContainer = () => {
     const user = await store.getState().user;
     if (!user) return;
     await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/friend/req/list`, { id: user.id }, { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/friend/req/list`, { withCredentials: true })
       .then((response) => setFriendReqList(response.data.result))
       .catch((err) => console.error(err));
   };
@@ -45,7 +45,7 @@ const FriendsListContainer = () => {
     const user = await store.getState().user;
     if (!user) return;
     await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/friend/list`, { req_id: user.id }, { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/friend/list`, { withCredentials: true })
       .then((response) => {
         setFriendList(response.data.result);
       })
