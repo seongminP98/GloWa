@@ -9,7 +9,7 @@ router.post('/makeSchedule', async (req,res,next)=>{
     console.log(req.body.name);
     let check = await Schedule.findAll({ //중복된 스케줄 이름 확인
         where: {
-            my_id: req.body.id,             //로그인한 사용자 아이디(스케줄 만들사람)
+            my_id: req.user.id,             //로그인한 사용자 아이디(스케줄 만들사람)
             schedule_name: req.body.name,   //만들 스케줄 이름
         }
     })
@@ -19,7 +19,7 @@ router.post('/makeSchedule', async (req,res,next)=>{
     }
 
     await Schedule.create({ //스케줄 만들기
-        my_id: req.body.id,  //스케줄 만든 유저 아이디
+        my_id: req.user.id,  //스케줄 만든 유저 아이디
         schedule_name: req.body.name, //스케줄 이름
         place: req.body.place,      //스케줄 장소
         date: req.body.date,        //스케줄 날짜,시간 / mysql에서 datetime형식
@@ -27,13 +27,13 @@ router.post('/makeSchedule', async (req,res,next)=>{
     let sId = await Schedule.findOne({ //스케줄 아이디 
         attributes:['id'],
         where:{
-            my_id: req.body.id, //스케줄 만든 유저 아이디
+            my_id: req.user.id, //스케줄 만든 유저 아이디
             schedule_name: req.body.name,   //만든 스케줄 이름
         }
     })
     let myId = await User.findOne({
         where:{
-            id: req.body.id
+            id: req.user.id
         }
     })
     
@@ -45,10 +45,10 @@ router.post('/makeSchedule', async (req,res,next)=>{
     res.status(200).send({code: 200, message: '스케줄 등록 완료'});
 })
 
-router.post('/list', async (req,res,next)=>{ //내 스케줄 목록
+router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
     let myId = await User.findOne({
         where:{
-            id: req.body.id //로그인한 사용자 아이디  //req.user.id로 바꾸고 get방식으로 바꾸기
+            id: req.user.id //로그인한 사용자 아이디
         }
     })
     //console.log('마이아이디',myId);
@@ -66,11 +66,7 @@ router.post('/list', async (req,res,next)=>{ //내 스케줄 목록
             list.push(s.dataValues);
         }
     }
-    // let list = await Schedule.findAll({
-    //     where:{
-    //         my_id: req.body.id,
-    //     }
-    // })
+
     if(Array.isArray(list) && list.length){
         res.status(200).send({code: 200, result: list});
     } else{
@@ -86,7 +82,7 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
             
             //schedule_name: req.body.name, //초대할 스케줄 이름
             id: req.body.invId,            //초대받은 스케줄목록에 있는 invId
-            my_id: req.body.id,           //로그인된 사용자(스케줄 초대할) id, 
+            my_id: req.user.id,           //로그인된 사용자(스케줄 초대할) id, 
             friend_id: req.body.friend_id, //스케줄에 초대할 친구 id
             
         }
@@ -111,13 +107,13 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     }
 
     const check = await Schedule.findOne({
-        my_id:req.body.id
+        my_id:req.user.id
     })
     //console.log('check',check.length)
     if(Array.isArray(check) && check.length){
         await InvSchedule.create({
             schedule_name: req.body.name,//스케줄 이름
-            my_id: req.body.id,
+            my_id: req.user.id,
             friend_id: req.body.friend_id,
         })
         res.status(200).send({code: 200, message: '스케줄 초대 완료'});
@@ -130,7 +126,7 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
 router.post('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목록
     let schedule = await InvSchedule.findAll({
         where :{
-            friend_id: req.body.id //로그인 된 내 아이디  req.user.id
+            friend_id: req.user.id //로그인 된 내 아이디  
         }
     })
     let list = [];
@@ -171,7 +167,7 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
     })
     let myId = await User.findOne({
         where:{
-            id: req.body.id //내 아이디 req.user.id
+            id: req.user.id //내 아이디 
         }
     })
     console.log(inv);
@@ -184,7 +180,7 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
         where:{
             id: inv.id,
             my_id: req.body.friend_id, //초대한 사람 아이디
-            friend_id: req.body.id
+            friend_id: req.user.id
         }
     })
     res.status(200).send({code: 200, message: '스케줄 수락 완료'});
