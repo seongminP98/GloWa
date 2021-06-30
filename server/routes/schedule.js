@@ -123,7 +123,7 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     }
 })
 
-router.post('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목록
+router.get('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목록
     let schedule = await InvSchedule.findAll({
         where :{
             friend_id: req.user.id //로그인 된 내 아이디  
