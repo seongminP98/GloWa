@@ -30,7 +30,7 @@ const RejectButton = styled.button`
 
 const ReqForm = styled.form``;
 
-const FriendSearchResultPresenter = ({ id, nickname, FriendAddbuttonClick, is_req, onAcceptButtonClick, user }) => {
+const FriendSearchResultPresenter = ({ id, nickname, FriendAddbuttonClick, is_req, onAcceptButtonClick, user, is_my_friend }) => {
   return (
     <MainDiv>
       <NickDiv>{nickname}</NickDiv>
@@ -41,7 +41,8 @@ const FriendSearchResultPresenter = ({ id, nickname, FriendAddbuttonClick, is_re
           <RejectButton>거절</RejectButton>
         </ReqForm>
       ) : (
-        user?.id !== id && <FriendAddButton onClick={FriendAddbuttonClick}>친구 추가</FriendAddButton>
+        user?.id !== id &&
+        (!is_my_friend || is_my_friend.nickname !== nickname) && <FriendAddButton onClick={FriendAddbuttonClick}>친구 추가</FriendAddButton>
       )}
     </MainDiv>
   );

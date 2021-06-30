@@ -90,7 +90,12 @@ const FriendsListPresenter = ({ onSearchSubmit, searchedList, mode, basicModeTog
           //검색 결과가 있는 경우
           <div>
             {searchedList?.map((r, index) => (
-              <FriendSearchResult key={index} id={r.id} nickname={r.nickname} />
+              <FriendSearchResult
+                key={index}
+                id={r.id}
+                nickname={r.nickname}
+                is_my_friend={friendList.find((friend) => friend.nickname === r.nickname)}
+              />
             ))}
           </div>
         ) : (
