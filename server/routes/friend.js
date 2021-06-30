@@ -11,7 +11,7 @@ router.post('/search', async (req,res,next)=>{
         attributes:['id','nickname'],
         where:{ 
             nickname:{
-                [Op.like]: `%${req.body.req_nickname}%`
+                [Op.like]: `%${req.body.req_nickname}%` //검색할 닉네임
             }
         }
     })
@@ -24,20 +24,20 @@ router.post('/search', async (req,res,next)=>{
 
 
 router.post('/add', async (req,res,next)=>{
-    let alreadyReq = await ReqFriend.findAll({
+    let alreadyReq = await ReqFriend.findAll({ //이미 친구요청을 보냈는지 확인.
         where:{
-            req_friend_id: req.body.req_id,
-            my_id: req.body.id,
+            req_friend_id: req.body.req_id,  //친구 추가할 아이디
+            my_id: req.user.id,             //내 아이디
         }
     })
     
     if(Array.isArray(alreadyReq) && alreadyReq.length){
         return res.status(400).send({code:400, message: '이미 친구요청을 보냈습니다.'});
     }
-    let alreadyRes = await ReqFriend.findAll({
+    let alreadyRes = await ReqFriend.findAll({ //내가 친구추가할 사람이 나한테 친구추가를 보냈을 때.
         where:{
-            req_friend_id: req.body.id,
-            my_id: req.body.req_id,
+            req_friend_id: req.user.id,  //내 아이디
+            my_id: req.body.req_id,     //친구 추가할 아이디
         }
     })
     if(Array.isArray(alreadyRes) && alreadyRes.length){
@@ -46,12 +46,12 @@ router.post('/add', async (req,res,next)=>{
 
 
     let user = await User.findOne({
-        where:{id: req.body.id}
+        where:{id: req.user.id} 
     })
 
     let alreadyFriend = await user.getFollowings();
     let check = false;
-    if(Array.isArray(alreadyFriend) && alreadyFriend.length){
+    if(Array.isArray(alreadyFriend) && alreadyFriend.length){  //이미 친구인지 확인.
         for(let i=0; i<alreadyFriend.length; i++){
             if(alreadyFriend[i].dataValues.id === req.body.req_id){
                 check = true;
@@ -64,17 +64,17 @@ router.post('/add', async (req,res,next)=>{
     }
 
     await ReqFriend.create({
-        my_id: req.body.id,
+        my_id: req.user.id,
         req_friend_id: req.body.req_id,
     })
     res.status(200).send({code:200, message: '친구 요청 완료'});
     
 })
 
-router.post('/req/list', async (req,res,next)=>{//요청받은 친구목록
+router.get('/req/list', async (req,res,next)=>{//요청받은 친구목록
     let friend = await ReqFriend.findAll({
         where:{
-            req_friend_id: req.body.id
+            req_friend_id: req.user.id
         }
     })
     let list = [];
@@ -99,10 +99,10 @@ router.post('/req/list', async (req,res,next)=>{//요청받은 친구목록
 
 })
 
-router.post('/accept', async (req,res,next)=>{
+router.post('/accept', async (req,res,next)=>{ //친구요청 수락
     let friend = await ReqFriend.findOne({
         where:{
-            req_friend_id: req.body.id,
+            req_friend_id: req.user.id, //내 아이디
             my_id: req.body.req_id, //요청보낸 사람의 아이디.
         }
     })
@@ -113,33 +113,33 @@ router.post('/accept', async (req,res,next)=>{
     })
 
 
-    await myId.addFollowings(parseInt(friend.my_id,10));
-    await myId.addFollowers(parseInt(friend.my_id,10));
+    await myId.addFollowings(parseInt(friend.my_id,10)); //
+    await myId.addFollowers(parseInt(friend.my_id,10));  // 친구 관계 db에 저장.
 
     
-    await ReqFriend.destroy({
+    await ReqFriend.destroy({ //친구가 되었으니 친구요청목록에서 삭제
         where :{
             my_id: req.body.req_id, //나한테 친구요청보낸 사람의 아이디
-            req_friend_id: req.body.id
+            req_friend_id: req.user.id
         }
     })
     res.status(200).send({code:200, message: '친구요청 수락 완료'});
 
 })
 
-router.post('/reject',async (req,res,next) => {
+router.post('/reject',async (req,res,next) => { //친구요청 거절하기
     await ReqFriend.destroy({
         where :{
             my_id: req.body.req_id, //나한테 친구요청보낸 사람의 아이디
-            req_friend_id: req.body.id
+            req_friend_id: req.user.id
         }
     })
     res.status(200).send({code:200, message: '거절되었습니다.'});
 })
 
-router.post('/list',async (req,res,next) =>{
+router.get('/list',async (req,res,next) =>{
     let user = await User.findOne({
-        where:{id: req.body.req_id}
+        where:{id: req.user.id}
     })
     let friend = await user.getFollowings();
     let list = [];
