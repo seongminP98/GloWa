@@ -26,3 +26,15 @@ router.post('/favorites/add',async (req,res,next)=>{
     res.status(200).send({code: 200, message: '즐겨찾기 등록 완료'});
 })
 
+router.get('/favorites/list', async (req,res,next)=>{
+    let list = await Favorites.findAll({
+        where : {
+            my_id : req.user.id,
+        }
+    })
+    if(list.length>0){
+        res.status(200).send({code: 200, result: list});
+    } else{
+        res.status(200).send({code: 200, message: '즐겨찾기 리스트가 비어있습니다.'})
+    }
+})
