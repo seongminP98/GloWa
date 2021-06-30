@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 module.exports = class Schedule extends Sequelize.Model {
     static init(sequelize){
         return super.init({
-            my_id:{    //스케줄 만든사람 아이디
+            my_id:{    //스케줄 만든사람 아이디, 이사람만 스케줄 초대권한있음.
                 type:Sequelize.INTEGER,
                 allowNull: false,
             },
