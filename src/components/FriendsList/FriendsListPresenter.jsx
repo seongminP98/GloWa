@@ -100,6 +100,7 @@ const FriendsListPresenter = ({
 }) => {
   return (
     <FriendsListMainDiv>
+
       {user ? (
         // 로그인이 되어있는 경우
         <>
@@ -161,6 +162,7 @@ const FriendsListPresenter = ({
           <RedirectionButton onClick={redirectToLoginPage}>로그인 페이지로 이동하기</RedirectionButton>
         </NotLoggedWarnnigDiv>
       )}
+
     </FriendsListMainDiv>
   );
 };
