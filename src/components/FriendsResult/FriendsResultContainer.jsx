@@ -4,9 +4,8 @@ import FriendsResultPresenter from './FriendsResultPresenter';
 import store from '../../store';
 import { useHistory } from 'react-router';
 
-const FriendsResultContainer = ({ id: req_id, nickname, is_req }) => {
+const FriendsResultContainer = ({ id: req_id, nickname, is_req, isDetailScreen }) => {
   const history = useHistory();
-  const user = store.getState().user;
 
   const onAcceptButtonClick = async (e) => {
     e.preventDefault();
@@ -32,15 +31,7 @@ const FriendsResultContainer = ({ id: req_id, nickname, is_req }) => {
       .catch((err) => console.error(err.response));
   };
 
-  return (
-    <FriendsResultPresenter
-      id={req_id}
-      nickname={nickname}
-      FriendAddbuttonClick={FriendAddbuttonClick}
-      onAcceptButtonClick={onAcceptButtonClick}
-      user={user}
-    />
-  );
+  return <FriendsResultPresenter id={req_id} nickname={nickname} isDetailScreen={isDetailScreen} />;
 };
 
 export default FriendsResultContainer;

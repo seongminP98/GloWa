@@ -141,7 +141,7 @@ const ParticipantsListItemDiv = styled.div`
 `;
 
 const DetailPresenter = (props) => {
-  const { createdAt, date, id, my_id, place, schedule_name, updatedAt, members, master_nickname } = props;
+  const { createdAt, date, id, my_id, place, schedule_name, updatedAt, member, master_nickname, loading } = props;
   const {
     onDeleteButtonClick,
     onModeToggleButtonClick,
@@ -179,7 +179,7 @@ const DetailPresenter = (props) => {
 
   return (
     <Detail>
-      {mode === 'normal' && (
+      {!loading && mode === 'normal' && (
         <DetailInfoDiv>
           <DetailInfoTitle>{schedule_name}</DetailInfoTitle>
           <DetailInfoDate>
@@ -204,13 +204,7 @@ const DetailPresenter = (props) => {
           </Button>
           <ParticipantsListTitle>참여자 목록</ParticipantsListTitle>
           <ParticipantsListDiv>
-            {members.map((m, index) => (
-              <ParticipantsListItemDiv>
-                <Avatar style={{ height: 30, width: 30 }}>{m.nickname.slice(0, 1).toUpperCase()}</Avatar>
-                <ParticipantsList key={index}>{m.nickname}</ParticipantsList>
-              </ParticipantsListItemDiv>
-            ))}
-            {members.map((m, index) => (
+            {member?.map((m, index) => (
               <ParticipantsListItemDiv>
                 <Avatar style={{ height: 30, width: 30 }}>{m.nickname.slice(0, 1).toUpperCase()}</Avatar>
                 <ParticipantsList key={index}>{m.nickname}</ParticipantsList>
@@ -224,7 +218,7 @@ const DetailPresenter = (props) => {
           </ButtonDiv>
         </DetailInfoDiv>
       )}
-      {mode === 'edit' && (
+      {!loading && mode === 'edit' && (
         <DetailInfoDiv>
           <TextField
             id="name"

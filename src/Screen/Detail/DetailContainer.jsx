@@ -1,21 +1,37 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DetailPresenter from './DetailPresenter';
 import dateF from 'date-and-time';
 
 const DetailContainer = () => {
   const location = useLocation();
-  const [props, setProps] = useState(location.state);
+  const [props, setProps] = useState();
+  const [loading, setLoading] = useState(true);
+  const reqScheduleDetail = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/schedule/${location.pathname.slice(-1)}`, { withCredentials: true })
+      .then(async (response) => {
+        console.log(response);
+        setProps(response.data.result);
+        setEditedName(response.data.result.schedule_name);
+        setEditedDate(dateF.format(new Date(response.data.result.date), 'YYYY-MM-DD'));
+        setEditedTime(dateF.format(new Date(response.data.result.date), 'HH:MM'));
+        setEditedPlace(response.data.result.place);
+        setLoading(false);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => reqScheduleDetail(), []);
+
   const [mode, setMode] = useState('normal');
 
   const [isValidationChecked, setIsValidationChecked] = useState(false);
-  const [editedName, setEditedName] = useState(props.schedule_name);
-  const [editedDate, setEditedDate] = useState(dateF.format(new Date(props.date), 'YYYY-MM-DD'));
-  const [editedTime, setEditedTime] = useState(dateF.format(new Date(props.date), 'HH:MM'));
-  const [editedPlace, setEditedPlace] = useState(props.place);
-
-  console.log(props);
+  const [editedName, setEditedName] = useState();
+  const [editedDate, setEditedDate] = useState();
+  const [editedTime, setEditedTime] = useState();
+  const [editedPlace, setEditedPlace] = useState();
 
   const checkValidation = () => {
     // 일정 추가 form 검사 함수 (제목 및 장소 입력 확인)
@@ -40,10 +56,10 @@ const DetailContainer = () => {
     else {
       if (confirmToLeave()) {
         setMode('normal');
-        setEditedName(props.schedule_name);
-        setEditedDate(dateF.format(new Date(props.date), 'YYYY-MM-DD'));
-        setEditedTime(dateF.format(new Date(props.date), 'HH:MM'));
-        setEditedPlace(props.place);
+        setEditedName(props?.schedule_name);
+        setEditedDate(dateF.format(new Date(props?.date), 'YYYY-MM-DD'));
+        setEditedTime(dateF.format(new Date(props?.date), 'HH:MM'));
+        setEditedPlace(props?.place);
       }
     }
   };
@@ -52,7 +68,7 @@ const DetailContainer = () => {
     const answer = window.confirm('정말로 삭제하시겠습니까?');
     if (answer) {
       axios
-        .delete(`${process.env.REACT_APP_SERVER_URL}/schedule/delete/${props.id}`, { withCredentials: true })
+        .delete(`${process.env.REACT_APP_SERVER_URL}/schedule/delete/${props?.id}`, { withCredentials: true })
         .then((response) => {
           console.log(response);
         })
@@ -62,10 +78,10 @@ const DetailContainer = () => {
 
   const confirmToLeave = () => {
     if (
-      editedName !== props.schedule_name ||
-      editedDate !== dateF.format(new Date(props.date), 'YYYY-MM-DD') ||
-      editedTime !== dateF.format(new Date(props.date), 'HH:MM') ||
-      editedPlace !== props.place
+      editedName !== props?.schedule_name ||
+      editedDate !== dateF.format(new Date(props?.date), 'YYYY-MM-DD') ||
+      editedTime !== dateF.format(new Date(props?.date), 'HH:MM') ||
+      editedPlace !== props?.place
     ) {
       return window.confirm(`변경하신 내용중에 저장되지 않은 내용이 있습니다.\n정말로 나가시겠습니까?`);
     }
@@ -76,7 +92,7 @@ const DetailContainer = () => {
     axios
       .patch(
         `${process.env.REACT_APP_SERVER_URL}/schedule/modify`,
-        { schedule_id: props.id, name: editedName, place: editedPlace, date: `${editedDate + ' ' + editedTime}` },
+        { schedule_id: props?.id, name: editedName, place: editedPlace, date: `${editedDate + ' ' + editedTime}` },
         { withCredentials: true }
       )
       .then((response) => {
@@ -105,6 +121,7 @@ const DetailContainer = () => {
       editedPlace={editedPlace}
       onChange={onChange}
       onSubmitButtonClick={onSubmitButtonClick}
+      loading={loading}
     />
   );
 };
