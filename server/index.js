@@ -11,6 +11,7 @@ const joinRouter = require('./routes/join');
 const authRouter = require('./routes/auth');
 const friendRouter = require('./routes/friend');
 const scheduleRouter = require('./routes/schedule');
+const mypageRouter = require('./routes/mypage');
 
 sequelize
   .sync({ force: false })
@@ -49,6 +50,7 @@ app.use('/auth', authRouter);
 app.use('/join', joinRouter);
 app.use('/friend', friendRouter);
 app.use('/schedule', scheduleRouter);
+app.use('/mypage', mypageRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
