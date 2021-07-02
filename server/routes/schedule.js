@@ -329,4 +329,41 @@ router.post('/transferSchedule', async(req,res,next)=>{
     }
 })
 
+router.post('/:schedule_id', async(req,res,next)=>{
+    let schedule = await Schedule.findOne({
+        where:{
+            id:req.params.schedule_id
+        }
+    })
+    let memberCheck = await schedule.getUsers();
+    let check = false;
+    let members = [];
+    for(let i=0; i<memberCheck.length; i++){
+        let member = new Object();
+        if(req.user.id===memberCheck[i].dataValues.id){
+            check = true;
+        }
+        member.id = memberCheck[i].dataValues.id;
+        member.nickname = memberCheck[i].dataValues.nickname;
+        members.push(member);   
+    }
+    if(!check){
+        res.status(200).send({code:200, message:'이 일정을 볼 권한이 없습니다.'})
+    }
+    
+    else{
+        
+        let master = await User.findOne({
+            where:{
+                id:schedule.dataValues.my_id
+            }
+        })
+        schedule.dataValues.master_nickname = master.dataValues.nickname
+        schedule.dataValues.member = members;
+        console.log('스케줄',schedule)
+
+        res.status(200).send({code:200, result:schedule})
+    }
+})
+
 module.exports = router;
