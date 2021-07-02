@@ -26,7 +26,7 @@ const DetailInfoTitle = styled.div`
 
 const DetailInfoDate = styled.div`
   font-size: 17px;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 `;
 
 const DetailInfoPlace = styled.div`
