@@ -45,10 +45,10 @@ router.post('/makeSchedule', async (req,res,next)=>{
     res.status(200).send({code: 200, message: '일정 등록 완료'});
 })
 
-router.post('/list', async (req,res,next)=>{ //내 스케줄 목록
+router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
     let myId = await User.findOne({
         where:{
-            id: req.body.id //로그인한 사용자 아이디
+            id: req.user.id //로그인한 사용자 아이디
         }
     })
     //console.log('마이아이디',myId);
@@ -304,6 +304,7 @@ router.post('/transferSchedule', async(req,res,next)=>{
     else if(req.user.id===req.body.other_id){
         res.status(200).send({code:200, message:'자기 자신한테는 권한을 넘길 수 없습니다.'});
     } 
+    
     else{
         await Schedule.update({
             my_id : req.body.other_id},  //권한을 넘길 사람 아이디
@@ -311,6 +312,7 @@ router.post('/transferSchedule', async(req,res,next)=>{
                 id : req.body.schedule_id
             }
         })
+
         res.status(200).send({code:200, message:'일정 권한을 넘겼습니다.'});
     }
 })
