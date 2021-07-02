@@ -30,7 +30,7 @@ const FriendSearchResultContainer = ({ id: req_id, nickname, is_req, refreshList
     }
     if (user.id === req_id) return window.alert('자기 자신에게는 친구 요청을 할 수 없습니다.');
     await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/friend/add`, { id: user.id, req_id })
+      .post(`${process.env.REACT_APP_SERVER_URL}/friend/add`, { id: user.id, req_id }, { withCredentials: true })
       .then((response) => window.alert(response.data.message))
       .catch((err) => console.error(err.response));
   };
