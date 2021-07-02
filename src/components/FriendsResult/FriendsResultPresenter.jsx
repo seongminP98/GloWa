@@ -12,28 +12,16 @@ const MainDiv = styled.div`
 
 const NickDiv = styled.div``;
 
-const FriendAddButton = styled.button`
+const InviteButton = styled.button`
   border: none;
   cursor: pointer;
 `;
 
-const AcceptButton = styled.button`
-  border: none;
-  cursor: pointer;
-  margin-right: 10px;
-`;
-
-const RejectButton = styled.button`
-  border: none;
-  cursor: pointer;
-`;
-
-const ReqForm = styled.form``;
-
-const FriendsResultPresenter = ({ id, nickname, FriendAddbuttonClick, is_req, onAcceptButtonClick, user }) => {
+const FriendsResultPresenter = ({ id, nickname, isDetailScreen }) => {
   return (
     <MainDiv>
       <NickDiv>{nickname}</NickDiv>
+      {isDetailScreen && <InviteButton>초대</InviteButton>}
     </MainDiv>
   );
 };

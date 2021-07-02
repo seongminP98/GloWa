@@ -58,7 +58,6 @@ const ScheduleContainer = () => {
   };
 
   const onSubmitButtonClick = async (e) => {
-    e.preventDefault();
     if (checkValidation()) reqCreateSchedule();
   };
 
