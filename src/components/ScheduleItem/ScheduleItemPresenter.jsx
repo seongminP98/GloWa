@@ -17,17 +17,19 @@ const ScheduleItemPresenter = (props) => {
   return (
     <Card style={{ width: 400 }}>
       <CardContent>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h5" component="h2" style={{ fontFamily: 'MaplestoryOTFBold' }}>
           {schedule_name}
         </Typography>
-        <Typography color="textSecondary">{dateF.format(new Date(date), 'YYYY-MM-DD HH:MM:SS')}</Typography>
-        <Typography variant="body2" component="p">
+        <Typography color="textSecondary" style={{ fontFamily: 'MaplestoryOTFBold' }}>
+          {dateF.format(new Date(date), 'YYYY.MM.DD. HH:MM')}
+        </Typography>
+        <Typography variant="body2" component="p" style={{ fontFamily: 'MaplestoryOTFBold' }}>
           {place}
         </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions style={{ fontFamily: 'MaplestoryOTFBold', marginLeft: 8 }}>
         <ScheduleDetailLink to={{ pathname: `/schedule/detail/${id}`, state: { ...props } }} size="small">
-          Learn More
+          자세히 보기
         </ScheduleDetailLink>
       </CardActions>
     </Card>
