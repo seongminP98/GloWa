@@ -214,18 +214,53 @@ router.delete('/exit', async(req,res,next)=>{ //스케줄 나가기
     })
     let user = await User.findOne({
         where :{
-            id : req.body.id
+            id : req.user.id
         }
     })
-    if(schedule.dataValues.my_id === req.body.id){
+    if(schedule.dataValues.my_id === req.user.id){
         res.status(200).send({code:200, message: '일정권한 양도 후 가능합니다.'}); 
-    }
-    else{
+    }else{
         await user.removeSchedules(schedule);
         res.status(200).send({code:200, message:'일정 탈퇴 완료'});
     }
 })
 
+router.patch('/modify', async(req,res,next)=>{
+    let schedule = await Schedule.findOne({
+        where :{
+            id : req.body.schedule_id
+        }
+    })
+
+    if(schedule.dataValues.my_id !== req.user.id){
+        res.status(200).send({code:200, message:'이 일정을 수정할 권한이 없습니다.'});
+    }
+
+    let check = await Schedule.findAll({ //중복된 스케줄 이름 확인
+        where: {
+            my_id: req.user.id,             
+            schedule_name: req.body.name,   //수정 할 스케줄 이름
+        }
+    })
+    if(req.body.name !== schedule.dataValues.schedule_name){
+        if(check.length>0){
+            return res.status(400).send({code: 400, message: '일정 이름을 변경해 주세요'})
+        }
+    }
+    
+    await Schedule.update(
+        {
+            schedule_name : req.body.name,
+            date : req.body.date,
+            place: req.body.place},
+            {where:{
+                id: req.body.schedule_id
+            }
+        }
+    )
+    res.status(200).send({code:200, message:'일정 수정이 완료되었습니다.'});
+   
+})
 
 
 module.exports = router;
