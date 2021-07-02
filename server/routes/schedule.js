@@ -45,10 +45,10 @@ router.post('/makeSchedule', async (req,res,next)=>{
     res.status(200).send({code: 200, message: '일정 등록 완료'});
 })
 
-router.post('/list', async (req,res,next)=>{ //내 스케줄 목록
+router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
     let myId = await User.findOne({
         where:{
-            id: req.body.id //로그인한 사용자 아이디
+            id: req.user.id //로그인한 사용자 아이디
         }
     })
     //console.log('마이아이디',myId);
@@ -216,16 +216,16 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
     res.status(200).send({code: 200, message: '일정 수락 완료'});
 })
 
-router.delete('/delete', async(req,res,next)=>{ //스케줄 만든사람이 스케줄 삭제
+router.delete('/delete/:id', async(req,res,next)=>{ //스케줄 만든사람이 스케줄 삭제
     let schedule = await Schedule.findOne({
         where:{
-            id : req.body.schedule_id
+            id : req.params.schedule_id
         }
     })
     if(schedule.dataValues.my_id === req.user.id){
         await Schedule.destroy({
             where:{
-                id : req.body.schedule_id,
+                id : req.params.schedule_id,
                 my_id : req.user.id
             }
         })
@@ -236,10 +236,10 @@ router.delete('/delete', async(req,res,next)=>{ //스케줄 만든사람이 스�
     
 })
 
-router.delete('/exit', async(req,res,next)=>{ //스케줄 나가기
+router.delete('/exit/:id', async(req,res,next)=>{ //스케줄 나가기
     let schedule = await Schedule.findOne({
         where :{
-            id : req.body.schedule_id
+            id : req.params.schedule_id
         }
     })
     let user = await User.findOne({
