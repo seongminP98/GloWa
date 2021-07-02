@@ -262,5 +262,27 @@ router.patch('/modify', async(req,res,next)=>{
    
 })
 
+router.post('/transferSchedule', async(req,res,next)=>{
+    let schedule = await Schedule.findOne({
+        where :{
+            id : req.body.schedule_id //이 스케줄 아이디
+        }
+    })
+    if(schedule.my_id !== req.user.id){
+        res.status(200).send({code:200, message:'이 일정에 대한 권한양도를 할 권한이 없습니다.'});
+    }
+    else if(req.user.id===req.body.other_id){
+        res.status(200).send({code:200, message:'자기 자신한테는 권한을 넘길 수 없습니다.'});
+    } 
+    else{
+        await Schedule.update({
+            my_id : req.body.other_id},  //권한을 넘길 사람 아이디
+            {where:{
+                id : req.body.schedule_id
+            }
+        })
+        res.status(200).send({code:200, message:'일정 권한을 넘겼습니다.'});
+    }
+})
 
 module.exports = router;
