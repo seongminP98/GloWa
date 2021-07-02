@@ -45,10 +45,10 @@ router.post('/makeSchedule', async (req,res,next)=>{
     res.status(200).send({code: 200, message: '일정 등록 완료'});
 })
 
-router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
+router.post('/list', async (req,res,next)=>{ //내 스케줄 목록
     let myId = await User.findOne({
         where:{
-            id: req.user.id //로그인한 사용자 아이디
+            id: req.body.id //로그인한 사용자 아이디
         }
     })
     //console.log('마이아이디',myId);
@@ -63,9 +63,39 @@ router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
                     id: schedule[i].dataValues.id
                 }
             })
+            let master = await User.findOne({
+                where:{
+                    id:schedule[i].dataValues.my_id
+                }
+            })
             list.push(s.dataValues);
+            list[i].master_nickname = master.dataValues.nickname
+
         }
     }
+    let ml = [];
+    for(let i=0; i<list.length; i++){
+        let memberList = [];
+        let sche = await Schedule.findOne({
+            where:{
+                id: list[i].id
+            }
+        })
+        let member = await sche.getUsers();
+        console.log("길이",member.length)
+        for(let j=0; j<member.length; j++){
+            let mem = new Object();
+            mem.id = member[j].dataValues.id,
+            mem.nickname = member[j].dataValues.nickname
+            memberList.push(mem);
+
+        }
+        ml.push(memberList);
+    }
+    for(let i=0; i<list.length; i++){
+        list[i].members = ml[i];
+    }
+    //console.log(list)
 
     if(Array.isArray(list) && list.length){
         res.status(200).send({code: 200, result: list});
