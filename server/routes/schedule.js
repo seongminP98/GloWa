@@ -15,7 +15,7 @@ router.post('/makeSchedule', async (req,res,next)=>{
     })
     //console.log(check.length);
     if(check.length>0){
-        return res.status(400).send({code: 400, message: '스케줄 이름을 변경해 주세요'})
+        return res.status(400).send({code: 400, message: '일정 이름을 변경해 주세요'})
     }
 
     await Schedule.create({ //스케줄 만들기
@@ -42,7 +42,7 @@ router.post('/makeSchedule', async (req,res,next)=>{
     //     UserId: req.body.id,
     //     ScheduleId: sId.id,
     // })
-    res.status(200).send({code: 200, message: '스케줄 등록 완료'});
+    res.status(200).send({code: 200, message: '일정 등록 완료'});
 })
 
 router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
@@ -70,7 +70,7 @@ router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
     if(Array.isArray(list) && list.length){
         res.status(200).send({code: 200, result: list});
     } else{
-        res.status(400).send({code:400, message: '스케줄 목록이 비어있습니다.'});
+        res.status(400).send({code:400, message: '일정 목록이 비어있습니다.'});
     }
     
 })
@@ -89,7 +89,7 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     })
     //console.log('alreadyInv',alreadyInv)
     if(alreadyInv){
-        return res.status(400).send({code:400, message: '이미 이 스케줄에 초대를 했습니다.'});
+        return res.status(400).send({code:400, message: '이미 이 일정에 초대를 했습니다.'});
     }
     
     let friend = await User.findOne({ //스케줄에 초대한 친구의 아이디로 검색
@@ -101,7 +101,7 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     if(Array.isArray(alreadySchedule) && alreadySchedule.length){
         for(let i=0; i<alreadySchedule.length; i++){                        //초대할 스케줄 id
             if(alreadySchedule[i].dataValues.id === req.body.schedule_id){ //스케줄 초대한 친구가 이미 내가 초대한 스케줄에 있다면.
-                return res.status(400).send({code:400, message: '이미 스케줄에 있습니다.'});
+                return res.status(400).send({code:400, message: '이미 일정에 있습니다.'});
             }
         }
     }
@@ -116,10 +116,10 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
             my_id: req.user.id,
             friend_id: req.body.friend_id,
         })
-        res.status(200).send({code: 200, message: '스케줄 초대 완료'});
+        res.status(200).send({code: 200, message: '일정 초대 완료'});
     }
     else{
-        res.status(200).send({code: 200, message: '이 스케줄에 대한 초대 권한이 없습니다.'});
+        res.status(200).send({code: 200, message: '이 일정에 대한 초대 권한이 없습니다.'});
     }
 })
 
@@ -152,7 +152,7 @@ router.get('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목�
         res.status(200).send({code:200, result: list});
     }
     else{
-        res.status(400).send({code:400, message: '초대받은 스케줄이 없습니다.'});
+        res.status(400).send({code:400, message: '초대받은 일정이 없습니다.'});
     }
 })
 
@@ -183,7 +183,7 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
             friend_id: req.user.id
         }
     })
-    res.status(200).send({code: 200, message: '스케줄 수락 완료'});
+    res.status(200).send({code: 200, message: '일정 수락 완료'});
 })
 
 router.delete('/delete', async(req,res,next)=>{ //스케줄 만든사람이 스케줄 삭제
@@ -199,12 +199,33 @@ router.delete('/delete', async(req,res,next)=>{ //스케줄 만든사람이 스�
                 my_id : req.user.id
             }
         })
-        res.status(200).send({code: 200, message: '스케줄 삭제 완료'});
+        res.status(200).send({code: 200, message: '일정 삭제 완료'});
     } else{
-        res.status(200).send({code: 200, message: '이 스케줄을 삭제할 권한이 없습니다.'});
+        res.status(200).send({code: 200, message: '이 일정을 삭제할 권한이 없습니다.'});
     }
     
 })
+
+router.delete('/exit', async(req,res,next)=>{ //스케줄 나가기
+    let schedule = await Schedule.findOne({
+        where :{
+            id : req.body.schedule_id
+        }
+    })
+    let user = await User.findOne({
+        where :{
+            id : req.body.id
+        }
+    })
+    if(schedule.dataValues.my_id === req.body.id){
+        res.status(200).send({code:200, message: '일정권한 양도 후 가능합니다.'}); 
+    }
+    else{
+        await user.removeSchedules(schedule);
+        res.status(200).send({code:200, message:'일정 탈퇴 완료'});
+    }
+})
+
 
 
 module.exports = router;
