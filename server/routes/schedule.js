@@ -107,19 +107,16 @@ router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
 
 router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     
-    let alreadyInv = await InvSchedule.findOne({ /** */
+    let alreadyInv = await InvSchedule.findOne({ 
         where:{
-            
-            //schedule_name: req.body.name, //초대할 스케줄 이름
-            id: req.body.invId,            //초대받은 스케줄목록에 있는 invId
+            schedule_id: req.body.schedule_id,            //초대할 스케줄 id
             my_id: req.user.id,           //로그인된 사용자(스케줄 초대할) id, 
             friend_id: req.body.friend_id, //스케줄에 초대할 친구 id
-            
         }
     })
-    //console.log('alreadyInv',alreadyInv)
+
     if(alreadyInv){
-        return res.status(400).send({code:400, message: '이미 이 일정에 초대를 했습니다.'});
+        return res.status(200).send({code:200, message: '이미 이 일정에 초대를 했습니다.'});
     }
     
     let friend = await User.findOne({ //스케줄에 초대한 친구의 아이디로 검색
@@ -131,18 +128,21 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     if(Array.isArray(alreadySchedule) && alreadySchedule.length){
         for(let i=0; i<alreadySchedule.length; i++){                        //초대할 스케줄 id
             if(alreadySchedule[i].dataValues.id === req.body.schedule_id){ //스케줄 초대한 친구가 이미 내가 초대한 스케줄에 있다면.
-                return res.status(400).send({code:400, message: '이미 일정에 있습니다.'});
+                return res.status(200).send({code:200, message: '이미 일정에 있습니다.'});
             }
         }
     }
 
     const check = await Schedule.findOne({
-        my_id:req.user.id
+        where:{
+            id: req.body.schedule_id,
+            my_id: req.user.id
+        }
     })
-    //console.log('check',check.length)
-    if(Array.isArray(check) && check.length){
+
+    if(check){
         await InvSchedule.create({
-            schedule_name: req.body.name,//스케줄 이름
+            schedule_id: req.body.schedule_id,//스케줄 이름
             my_id: req.user.id,
             friend_id: req.body.friend_id,
         })
@@ -152,6 +152,8 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
         res.status(200).send({code: 200, message: '이 일정에 대한 초대 권한이 없습니다.'});
     }
 })
+
+
 
 router.get('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목록
     let schedule = await InvSchedule.findAll({
@@ -329,7 +331,7 @@ router.post('/transferSchedule', async(req,res,next)=>{
     }
 })
 
-router.post('/:schedule_id', async(req,res,next)=>{
+router.get('/:schedule_id', async(req,res,next)=>{
     let schedule = await Schedule.findOne({
         where:{
             id:req.params.schedule_id
