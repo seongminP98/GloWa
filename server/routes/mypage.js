@@ -47,3 +47,5 @@ router.delete('/favorites/delete', async(req,res,next)=>{
     })
     res.status(200).send({code: 200, message: '삭제되었습니다.'});
 })
+
+module.exports = router;
