@@ -298,19 +298,34 @@ router.post('/transferSchedule', async(req,res,next)=>{
             id : req.body.schedule_id //이 스케줄 아이디
         }
     })
-    if(schedule.my_id !== req.user.id){
+    let members = await schedule.getUsers();
+    let check = false;
+    //console.log(members[0].dataValues)
+    for(let i=0; i<members.length; i++){
+        if(req.body.other_id === members[i].dataValues.id){
+            check = true;
+        }
+    }
+    
+    if(schedule.my_id !== req.body.id){
         res.status(200).send({code:200, message:'이 일정에 대한 권한양도를 할 권한이 없습니다.'});
     }
-    else if(req.user.id===req.body.other_id){
+    else if(req.body.id===req.body.other_id){
         res.status(200).send({code:200, message:'자기 자신한테는 권한을 넘길 수 없습니다.'});
     } 
     else{
-        await Schedule.update({
-            my_id : req.body.other_id},  //권한을 넘길 사람 아이디
-            {where:{
-                id : req.body.schedule_id
-            }
-        })
+        if(!check){
+            res.status(200).send({code:200, message:'먼저 이 일정에 초대해주세요.'});
+        }
+        else{
+            await Schedule.update({
+                my_id : req.body.other_id},  //권한을 넘길 사람 아이디
+                {where:{
+                    id : req.body.schedule_id
+                }
+            })
+        }
+        
         res.status(200).send({code:200, message:'일정 권한을 넘겼습니다.'});
     }
 })
