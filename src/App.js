@@ -2,6 +2,7 @@ import './App.css';
 import Header from './components/Header';
 import MainPage from './Screen/MainPage';
 import Login from './Screen/Login';
+import Detail from './Screen/Detail';
 import Join from './Screen/Join';
 import Schedule from './Screen/Schedule';
 import FriendsList from './components/FriendsList';
@@ -69,6 +70,16 @@ function App() {
           </Route>
           <Route exact path="/join">
             <Join />
+          </Route>
+          <Route exact path="/schedule/detail/:id">
+            <MainMainDiv>
+              <MainDiv>
+                <Detail />
+                <FriendsDiv>
+                  <FriendsList />
+                </FriendsDiv>
+              </MainDiv>
+            </MainMainDiv>
           </Route>
         </Router>
       )}
