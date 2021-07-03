@@ -7,6 +7,7 @@ import store from '../../store';
 
 const ScheduleContainer = () => {
   const [scheduleList, setScheduleList] = useState([]);
+  const [scheduleInviteList, setScheduleInviteList] = useState([]);
   const [place, setPlace] = useState('');
   const [name, setName] = useState('');
   const [date, setDate] = useState(dateF.format(new Date(), 'YYYY-MM-DD'));
@@ -61,8 +62,16 @@ const ScheduleContainer = () => {
     if (checkValidation()) reqCreateSchedule();
   };
 
+  const getInviteList = () => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/schedule/invite/list`, { withCredentials: true })
+      .then((response) => console.log(response))
+      .catch((err) => console.error(err));
+  };
+
   useEffect(() => {
     getScheduleList();
+    getInviteList();
   }, []);
 
   return (

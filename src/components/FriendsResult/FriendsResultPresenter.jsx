@@ -17,11 +17,11 @@ const InviteButton = styled.button`
   cursor: pointer;
 `;
 
-const FriendsResultPresenter = ({ id, nickname, isDetailScreen }) => {
+const FriendsResultPresenter = ({ id, nickname, isDetailScreen, onInviteButtonClick }) => {
   return (
     <MainDiv>
       <NickDiv>{nickname}</NickDiv>
-      {isDetailScreen && <InviteButton>초대</InviteButton>}
+      {isDetailScreen && <InviteButton onClick={onInviteButtonClick}>초대</InviteButton>}
     </MainDiv>
   );
 };
