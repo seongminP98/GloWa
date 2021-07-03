@@ -202,6 +202,7 @@ const DetailPresenter = (props) => {
           >
             <i className="fas fa-map-marked-alt" style={{ marginRight: 5 }}></i> 지도에서 검색하기
           </Button>
+
           <ParticipantsListTitle>참여자 목록</ParticipantsListTitle>
           <ParticipantsListDiv>
             {member?.map((m, index) => (

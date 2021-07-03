@@ -3,6 +3,8 @@ import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import dateF from 'date-and-time';
 import ScheduleItem from '../../components/ScheduleItem';
+import { Popover, List, ListSubheader, ListItem, ListItemText, Badge } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 const Schedule = styled.div`
   font-family: 'MaplestoryOTFBold';
@@ -21,12 +23,20 @@ const ModeToggleButtonDiv = styled.div`
   bottom: 30px;
 `;
 
+const ListButtonDiv = styled.div`
+  display: flex;
+`;
+
+const InviteListDiv = styled.div`
+  margin-left: 10px;
+  height: 40px;
+`;
+
 const ToggleButton = styled.button`
   border: none;
   cursor: pointer;
   outline: none;
   width: 50px;
-  height: 50px;
   background-color: #2962ff;
   height: 40px;
   color: #ffffff;
@@ -104,6 +114,36 @@ const ScheduleListContentsDiv = styled.div`
 `;
 
 const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonClick, mode, onModeTogglebuttonClick, scheduleList }) => {
+  // Popover를 위한  setting
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const _id = open ? 'simple-popover' : undefined;
+
+  //List를 위한 setting
+  const [checked, setChecked] = React.useState(['wifi']);
+
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
   return (
     <Schedule>
       <ModeToggleButtonDiv>
@@ -113,9 +153,57 @@ const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonCl
           </ToggleButton>
         )}
         {mode === 'list' && (
-          <ToggleButton onClick={onModeTogglebuttonClick}>
-            <i class="fas fa-plus"></i>
-          </ToggleButton>
+          <ListButtonDiv>
+            <ToggleButton onClick={onModeTogglebuttonClick}>
+              <i className="fas fa-plus"></i>
+            </ToggleButton>
+            {/* 일정 초대 목록 보여주기 */}
+            <InviteListDiv>
+              <Badge badgeContent={4} color="error" style={{ height: 40 }}>
+                <Button
+                  color="primary"
+                  style={{ height: '100%', fontSize: 19 }}
+                  aria-describedby={_id}
+                  variant="contained"
+                  onClick={handleClick}
+                >
+                  <i className="far fa-bell"></i>
+                </Button>
+              </Badge>
+              <Popover
+                id={_id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <List
+                  style={{ fontFamily: 'MaplestoryOTFBold' }}
+                  subheader={<ListSubheader style={{ fontFamily: 'MaplestoryOTFBold' }}>일정 초대 목록</ListSubheader>}
+                >
+                  <ListItem>
+                    <ListItemText primary="Hello"></ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Hello"></ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Hello"></ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Hello"></ListItemText>
+                  </ListItem>
+                </List>
+              </Popover>
+            </InviteListDiv>
+          </ListButtonDiv>
         )}
       </ModeToggleButtonDiv>
       {mode === 'list' && (
