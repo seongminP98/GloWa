@@ -49,6 +49,7 @@ const DetailContainer = () => {
     else if (elementId === 'date') setEditedDate(value);
     else if (elementId === 'time') setEditedTime(value);
     else setEditedPlace(value);
+    console.log(editedTime);
   };
 
   const onModeToggleButtonClick = () => {
@@ -97,7 +98,8 @@ const DetailContainer = () => {
       )
       .then((response) => {
         if (response.data.message === '일정 수정이 완료되었습니다.') {
-          setProps({ ...props, schedule_name: editedName, place: editedPlace, date: `${editedDate + ' ' + editedTime}` });
+          setProps({ ...props, schedule_name: editedName, place: editedPlace, date: new Date(`${editedDate + ' ' + editedTime}:00`) });
+          console.log(new Date(`${editedDate + ' ' + editedTime}:00`));
           setMode('normal');
           window.alert('성공적으로 수정되었습니다.');
         }
