@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import DetailPresenter from './DetailPresenter';
 import dateF from 'date-and-time';
 
 const DetailContainer = () => {
+  const history = useHistory();
   const location = useLocation();
   const [props, setProps] = useState();
   const [loading, setLoading] = useState(true);
@@ -71,7 +72,8 @@ const DetailContainer = () => {
       axios
         .delete(`${process.env.REACT_APP_SERVER_URL}/schedule/delete/${props?.id}`, { withCredentials: true })
         .then((response) => {
-          console.log(response);
+          window.alert('정상적으로 삭제되었습니다!');
+          history.push({ pathname: '/schedule' });
         })
         .catch((err) => console.error(err));
     }
