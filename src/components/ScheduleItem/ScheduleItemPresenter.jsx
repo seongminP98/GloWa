@@ -14,6 +14,13 @@ const ScheduleDetailLink = styled(Link)`
 
 const ScheduleItemPresenter = (props) => {
   const { id, schedule_name, date, place } = props;
+
+  const switchMeridiemEngToKor = () => {
+    const m = dateF.format(new Date(date), 'A');
+    if (m === 'AM') return '오전';
+    else return '오후';
+  };
+
   return (
     <Card style={{ width: 400 }}>
       <CardContent>
@@ -21,7 +28,7 @@ const ScheduleItemPresenter = (props) => {
           {schedule_name}
         </Typography>
         <Typography color="textSecondary" style={{ fontFamily: 'MaplestoryOTFBold' }}>
-          {dateF.format(new Date(date), 'YYYY.MM.DD. HH:MM')}
+          {dateF.format(new Date(date), `YYYY.MM.DD. ${switchMeridiemEngToKor()} HH:mm`)}
         </Typography>
         <Typography variant="body2" component="p" style={{ fontFamily: 'MaplestoryOTFBold' }}>
           {place}
