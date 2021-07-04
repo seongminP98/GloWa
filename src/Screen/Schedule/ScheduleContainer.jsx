@@ -10,7 +10,7 @@ const ScheduleContainer = () => {
   const [place, setPlace] = useState('');
   const [name, setName] = useState('');
   const [date, setDate] = useState(dateF.format(new Date(), 'YYYY-MM-DD'));
-  const [time, setTime] = useState(dateF.format(new Date(), 'HH:MM'));
+  const [time, setTime] = useState(dateF.format(new Date(), 'HH:mm'));
   const [mode, setMode] = useState('list');
   const [isValidationChecked, setIsValidationChecked] = useState(false);
   const history = useHistory();

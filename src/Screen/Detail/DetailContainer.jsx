@@ -17,7 +17,7 @@ const DetailContainer = () => {
         setProps(response.data.result);
         setEditedName(response.data.result.schedule_name);
         setEditedDate(dateF.format(new Date(response.data.result.date), 'YYYY-MM-DD'));
-        setEditedTime(dateF.format(new Date(response.data.result.date), 'HH:MM'));
+        setEditedTime(dateF.format(new Date(response.data.result.date), 'HH:mm'));
         setEditedPlace(response.data.result.place);
         setLoading(false);
       })

@@ -243,7 +243,6 @@ const DetailPresenter = (props) => {
               label="Date"
               type="date"
               value={editedDate}
-              defaultValue={dateF.format(new Date(date), 'YYYY-MM-DD')}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -255,7 +254,6 @@ const DetailPresenter = (props) => {
               label="Time"
               value={editedTime}
               type="time"
-              defaultValue={dateF.format(new Date(date), 'HH:MM')}
               InputLabelProps={{
                 shrink: true,
               }}

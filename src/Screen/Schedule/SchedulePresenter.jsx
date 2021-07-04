@@ -242,7 +242,7 @@ const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonCl
                 label="Time"
                 type="time"
                 value={time}
-                defaultValue={dateF.format(new Date(), 'HH:MM')}
+                defaultValue={dateF.format(new Date(), 'HH:mm')}
                 InputLabelProps={{
                   shrink: true,
                 }}
