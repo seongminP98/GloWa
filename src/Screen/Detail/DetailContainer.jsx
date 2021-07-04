@@ -28,7 +28,7 @@ const DetailContainer = () => {
 
   const [mode, setMode] = useState('normal');
 
-  const [isValidationChecked, setIsValidationChecked] = useState(false);
+  const [isValidationChecked, setIsValidationChecked] = useState(true);
   const [editedName, setEditedName] = useState();
   const [editedDate, setEditedDate] = useState();
   const [editedTime, setEditedTime] = useState();
@@ -50,6 +50,7 @@ const DetailContainer = () => {
     else if (elementId === 'date') setEditedDate(value);
     else if (elementId === 'time') setEditedTime(value);
     else setEditedPlace(value);
+    checkValidation();
   };
 
   const onModeToggleButtonClick = () => {
@@ -101,6 +102,7 @@ const DetailContainer = () => {
         if (response.data.message === '일정 수정이 완료되었습니다.') {
           setProps({ ...props, schedule_name: editedName, place: editedPlace, date: new Date(`${editedDate + ' ' + editedTime}:00`) });
           setMode('normal');
+          setIsValidationChecked(false);
           window.alert('성공적으로 수정되었습니다.');
         }
       })
@@ -108,7 +110,7 @@ const DetailContainer = () => {
   };
 
   const onSubmitButtonClick = () => {
-    if (checkValidation()) reqModifySchedule();
+    if (isValidationChecked) reqModifySchedule();
   };
 
   return (
