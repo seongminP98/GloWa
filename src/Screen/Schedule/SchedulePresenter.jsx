@@ -11,6 +11,7 @@ const Schedule = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 60px;
+  min-width: 1500px;
   align-items: center;
 `;
 
@@ -21,6 +22,7 @@ const ModeToggleButtonDiv = styled.div`
   margin-right: 200px;
   position: relative;
   bottom: 30px;
+  width: 100%;
 `;
 
 const ListButtonDiv = styled.div`

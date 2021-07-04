@@ -23,6 +23,7 @@ const ScheduleContainer = () => {
     else if (elemntId === 'date') setDate(value);
     else if (elemntId === 'time') setTime(value);
     else setPlace(value);
+    checkValidation();
   };
 
   const onModeTogglebuttonClick = () => {
@@ -38,15 +39,10 @@ const ScheduleContainer = () => {
   };
 
   const checkValidation = () => {
-    // 일정 추가 form 검사 함수 (제목 및 장소 입력 확인)
-    if (name === '') return window.alert('일정 제목을 입력해주세요');
-    if (place === '') return window.alert('장소를 입력해주세요');
-    setIsValidationChecked(true);
-    return isValidationChecked;
+    if (name !== '' && place !== '') setIsValidationChecked(true);
   };
 
   const reqCreateSchedule = () => {
-    if (!isValidationChecked) return;
     axios
       .post(
         `${process.env.REACT_APP_SERVER_URL}/schedule/makeSchedule`,
@@ -62,7 +58,11 @@ const ScheduleContainer = () => {
   };
 
   const onSubmitButtonClick = async (e) => {
-    if (checkValidation()) reqCreateSchedule();
+    if (isValidationChecked) reqCreateSchedule();
+    else {
+      if (name === '') return window.alert('일정 제목을 입력해주세요');
+      if (place === '') return window.alert('장소를 입력해주세요');
+    }
   };
 
   const getInviteList = () => {
