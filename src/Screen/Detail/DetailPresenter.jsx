@@ -128,6 +128,7 @@ const ParticipantsListDiv = styled.div`
   margin-top: 15px;
   display: flex;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 `;
 
 const ParticipantsList = styled.div`
