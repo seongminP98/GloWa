@@ -11,6 +11,7 @@ const Schedule = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 60px;
+  min-width: 1500px;
   align-items: center;
 `;
 
@@ -21,6 +22,7 @@ const ModeToggleButtonDiv = styled.div`
   margin-right: 200px;
   position: relative;
   bottom: 30px;
+  width: 100%;
 `;
 
 const ListButtonDiv = styled.div`
@@ -185,8 +187,8 @@ const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonCl
                 }}
               >
                 <List
-                  style={{ fontFamily: 'MaplestoryOTFBold' }}
-                  subheader={<ListSubheader style={{ fontFamily: 'MaplestoryOTFBold' }}>일정 초대 목록</ListSubheader>}
+                  style={{ fontFamily: 'MaplestoryOTFBold', minWidth: 350 }}
+                  subheader={<ListSubheader style={{ fontFamily: 'MaplestoryOTFBold', color: '#000000' }}>일정 초대 목록</ListSubheader>}
                 >
                   <ListItem>
                     <ListItemText primary="Hello"></ListItemText>
@@ -242,7 +244,7 @@ const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonCl
                 label="Time"
                 type="time"
                 value={time}
-                defaultValue={dateF.format(new Date(), 'HH:MM')}
+                defaultValue={dateF.format(new Date(), 'HH:mm')}
                 InputLabelProps={{
                   shrink: true,
                 }}

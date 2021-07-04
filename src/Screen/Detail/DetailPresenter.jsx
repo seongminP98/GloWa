@@ -128,6 +128,7 @@ const ParticipantsListDiv = styled.div`
   margin-top: 15px;
   display: flex;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 `;
 
 const ParticipantsList = styled.div`
@@ -177,6 +178,11 @@ const DetailPresenter = (props) => {
     }
   };
 
+  const switchMeridiemEngToKor = () => {
+    const m = dateF.format(new Date(date), 'A');
+    if (m === 'AM') return '오전';
+    else return '오후';
+  };
   return (
     <Detail>
       {!loading && mode === 'normal' && (
@@ -184,7 +190,7 @@ const DetailPresenter = (props) => {
           <DetailInfoTitle>{schedule_name}</DetailInfoTitle>
           <DetailInfoDate>
             <i class="far fa-calendar-alt" style={{ marginRight: 7 }}></i>
-            {dateF.format(new Date(date), `YYYY. MM. DD. ${switchDateEngToKor()} HH:MM`)}
+            {dateF.format(new Date(date), `YYYY. MM. DD. ${switchDateEngToKor()} /  ${switchMeridiemEngToKor()} hh:mm `)}
           </DetailInfoDate>
           <DetailInfoPlace>
             <i className="fas fa-map-marker-alt" style={{ marginRight: 7 }}></i>
@@ -238,7 +244,6 @@ const DetailPresenter = (props) => {
               label="Date"
               type="date"
               value={editedDate}
-              defaultValue={dateF.format(new Date(date), 'YYYY-MM-DD')}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -250,7 +255,6 @@ const DetailPresenter = (props) => {
               label="Time"
               value={editedTime}
               type="time"
-              defaultValue={dateF.format(new Date(date), 'HH:MM')}
               InputLabelProps={{
                 shrink: true,
               }}

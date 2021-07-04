@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import DetailPresenter from './DetailPresenter';
 import dateF from 'date-and-time';
 
 const DetailContainer = () => {
+  const history = useHistory();
   const location = useLocation();
   const [props, setProps] = useState();
   const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ const DetailContainer = () => {
         setProps(response.data.result);
         setEditedName(response.data.result.schedule_name);
         setEditedDate(dateF.format(new Date(response.data.result.date), 'YYYY-MM-DD'));
-        setEditedTime(dateF.format(new Date(response.data.result.date), 'HH:MM'));
+        setEditedTime(dateF.format(new Date(response.data.result.date), 'HH:mm'));
         setEditedPlace(response.data.result.place);
         setLoading(false);
       })
@@ -27,7 +28,7 @@ const DetailContainer = () => {
 
   const [mode, setMode] = useState('normal');
 
-  const [isValidationChecked, setIsValidationChecked] = useState(false);
+  const [isValidationChecked, setIsValidationChecked] = useState(true);
   const [editedName, setEditedName] = useState();
   const [editedDate, setEditedDate] = useState();
   const [editedTime, setEditedTime] = useState();
@@ -49,6 +50,7 @@ const DetailContainer = () => {
     else if (elementId === 'date') setEditedDate(value);
     else if (elementId === 'time') setEditedTime(value);
     else setEditedPlace(value);
+    checkValidation();
   };
 
   const onModeToggleButtonClick = () => {
@@ -70,7 +72,8 @@ const DetailContainer = () => {
       axios
         .delete(`${process.env.REACT_APP_SERVER_URL}/schedule/delete/${props?.id}`, { withCredentials: true })
         .then((response) => {
-          console.log(response);
+          window.alert('정상적으로 삭제되었습니다!');
+          history.push({ pathname: '/schedule' });
         })
         .catch((err) => console.error(err));
     }
@@ -97,8 +100,9 @@ const DetailContainer = () => {
       )
       .then((response) => {
         if (response.data.message === '일정 수정이 완료되었습니다.') {
-          setProps({ ...props, schedule_name: editedName, place: editedPlace, date: `${editedDate + ' ' + editedTime}` });
+          setProps({ ...props, schedule_name: editedName, place: editedPlace, date: new Date(`${editedDate + ' ' + editedTime}:00`) });
           setMode('normal');
+          setIsValidationChecked(false);
           window.alert('성공적으로 수정되었습니다.');
         }
       })
@@ -106,7 +110,7 @@ const DetailContainer = () => {
   };
 
   const onSubmitButtonClick = () => {
-    if (checkValidation()) reqModifySchedule();
+    if (isValidationChecked) reqModifySchedule();
   };
 
   return (

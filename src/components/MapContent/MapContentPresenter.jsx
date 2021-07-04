@@ -140,6 +140,8 @@ const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, g
 
             const map = new window.kakao.maps.Map(container, options);
 
+            let bounds = new kakao.maps.LatLngBounds();
+
             location.forEach((l) => {
               //마커가 표시 될 위치
               let markerPosition = new kakao.maps.LatLng(l.y, l.x);
@@ -151,6 +153,8 @@ const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, g
 
               // 마커를 지도 위에 표시
               marker.setMap(map);
+              bounds.extend(new kakao.maps.LatLng(l.y, l.x));
+              map.setBounds(bounds);
             });
 
             // 음식점 마커 표시
@@ -188,6 +192,7 @@ const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, g
             });
           });
         };
+
         break;
     }
   });
