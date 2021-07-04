@@ -1,9 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import dateF from 'date-and-time';
 import SchedulePresenter from './SchedulePresenter';
-import store from '../../store';
+import { useHistory } from 'react-router-dom';
 
 const ScheduleContainer = () => {
   const [scheduleList, setScheduleList] = useState([]);
@@ -14,7 +13,7 @@ const ScheduleContainer = () => {
   const [time, setTime] = useState(dateF.format(new Date(), 'HH:MM'));
   const [mode, setMode] = useState('list');
   const [isValidationChecked, setIsValidationChecked] = useState(false);
-  const user = store.getState().user;
+  const history = useHistory();
 
   const onChange = (e) => {
     const value = e.target.value;
@@ -54,7 +53,11 @@ const ScheduleContainer = () => {
         { name, place, date: `${date + ' ' + time}` },
         { withCredentials: true }
       )
-      .then((response) => console.log(response))
+      .then((response) => {
+        window.alert('일정이 추가되었습니다!');
+        getScheduleList();
+        setMode('list');
+      })
       .catch((err) => console.error(err));
   };
 
