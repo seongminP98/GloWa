@@ -185,8 +185,8 @@ const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonCl
                 }}
               >
                 <List
-                  style={{ fontFamily: 'MaplestoryOTFBold' }}
-                  subheader={<ListSubheader style={{ fontFamily: 'MaplestoryOTFBold' }}>일정 초대 목록</ListSubheader>}
+                  style={{ fontFamily: 'MaplestoryOTFBold', minWidth: 350 }}
+                  subheader={<ListSubheader style={{ fontFamily: 'MaplestoryOTFBold', color: '#000000' }}>일정 초대 목록</ListSubheader>}
                 >
                   <ListItem>
                     <ListItemText primary="Hello"></ListItemText>
