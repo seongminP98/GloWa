@@ -128,11 +128,17 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     })
     
     let alreadySchedule = await friend.getSchedules(); //스케줄 초대한 친구의 모든 스케줄 가져오기
-
+    console.log('alreadySchedule',alreadySchedule);
     if(Array.isArray(alreadySchedule) && alreadySchedule.length){
         for(let i=0; i<alreadySchedule.length; i++){                        //초대할 스케줄 id
-            if(alreadySchedule[i].dataValues.id === req.body.schedule_id){ //스케줄 초대한 친구가 이미 내가 초대한 스케줄에 있다면.
+            // console.log('alreadySchedule[i].dataValues.id',alreadySchedule[i].dataValues.id);
+            // console.log(typeof(alreadySchedule[i].dataValues.id))
+            // console.log('req.body.schedule_id',req.body.schedule_id);
+            // console.log(typeof(req.body.schedule_id))
+            if(String(alreadySchedule[i].dataValues.id) === req.body.schedule_id){ //스케줄 초대한 친구가 이미 내가 초대한 스케줄에 있다면.
                 return res.status(200).send({code:200, message: '이미 일정에 있습니다.'});
+            }else{
+                console.log('다름');
             }
         }
     }
