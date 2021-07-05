@@ -68,7 +68,29 @@ const ScheduleContainer = () => {
   const getInviteList = () => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/schedule/invite/list`, { withCredentials: true })
-      .then((response) => console.log(response))
+      .then((response) => setScheduleInviteList(response.data.result.filter((a) => a !== null)))
+      .catch((err) => console.error(err));
+  };
+
+  const onInvAcceptButtonClick = (schedule_id, friend_id) => {
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/schedule/accept`, { schedule_id, friend_id }, { withCredentials: true })
+      .then((response) => {
+        getScheduleList();
+        getInviteList();
+        window.alert('일정에 참가되었습니다');
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const onInvRejectButtonClick = (schedule_id, friend_id) => {
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/schedule/reject`, { schedule_id, friend_id }, { withCredentials: true })
+      .then((response) => {
+        getScheduleList();
+        getInviteList();
+        window.alert('일정 초대를 거절하였습니다');
+      })
       .catch((err) => console.error(err));
   };
 
@@ -88,6 +110,8 @@ const ScheduleContainer = () => {
       onSubmitButtonClick={onSubmitButtonClick}
       onModeTogglebuttonClick={onModeTogglebuttonClick}
       scheduleList={scheduleList}
+      scheduleInviteList={scheduleInviteList}
+      onInvAcceptButtonClick={onInvAcceptButtonClick}
     />
   );
 };
