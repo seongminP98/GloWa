@@ -338,8 +338,9 @@ router.post('/transferSchedule', async(req,res,next)=>{
     let members = await schedule.getUsers();
     let check = false;
     //console.log(members[0].dataValues)
+    console.log
     for(let i=0; i<members.length; i++){
-        if(req.body.other_id === members[i].dataValues.id){
+        if(req.body.friend_id === members[i].dataValues.id){
             console.log('ok')
             check = true;
         }
@@ -348,7 +349,7 @@ router.post('/transferSchedule', async(req,res,next)=>{
     if(schedule.my_id !== req.user.id){
         return res.status(200).send({code:200, message:'이 일정에 대한 권한양도를 할 권한이 없습니다.'});
     }
-    else if(req.user.id===req.body.other_id){
+    else if(req.user.id===req.body.friend_id){
         return res.status(200).send({code:200, message:'자기 자신한테는 권한을 넘길 수 없습니다.'});
     } 
     else{
@@ -357,7 +358,7 @@ router.post('/transferSchedule', async(req,res,next)=>{
         }
         else{
             await Schedule.update({
-                my_id : req.body.other_id},  //권한을 넘길 사람 아이디
+                my_id : req.body.friend_id},  //권한을 넘길 사람 아이디
                 {where:{
                     id : req.body.schedule_id
                 }
@@ -398,7 +399,7 @@ router.get('/:schedule_id', async(req,res,next)=>{
         })
         schedule.dataValues.master_nickname = master.dataValues.nickname
         schedule.dataValues.member = members;
-        console.log('스케줄',schedule)
+        //console.log('스케줄',schedule)
 
         res.status(200).send({code:200, result:schedule})
     }
