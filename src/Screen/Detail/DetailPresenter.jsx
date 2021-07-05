@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import dateF from 'date-and-time';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { Avatar, StyledMenuItem, ListItemIcon, ListItemText, Menu, MenuItem, withStyles } from '@material-ui/core';
-
+import { Avatar } from '@material-ui/core';
+import ParticipantsListComponent from '../../components/ParticipantsList';
 const Detail = styled.div`
   width: 100%;
   display: flex;
@@ -159,7 +159,7 @@ const ExitButton = styled.button`
 `;
 
 const DetailPresenter = (props) => {
-  const { createdAt, date, id, my_id, place, schedule_name, updatedAt, member, master_nickname, loading, user } = props;
+  const { createdAt, date, id, my_id, place, schedule_name, updatedAt, member, master_nickname, loading, user, reqScheduleDetail } = props;
   const {
     onDeleteButtonClick,
     onModeToggleButtonClick,
@@ -172,6 +172,7 @@ const DetailPresenter = (props) => {
     onSubmitButtonClick,
     onMandateButtonClick,
     onExitButtonClick,
+    onKickButtonClick,
   } = props;
 
   const switchDateEngToKor = () => {
@@ -203,49 +204,6 @@ const DetailPresenter = (props) => {
     else return '오후';
   };
 
-  const StyledMenu = withStyles({
-    paper: {
-      border: '1px solid #d3d4d5',
-    },
-  })((props) => (
-    <Menu
-      elevation={0}
-      getContentAnchorEl={null}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
-      }}
-      {...props}
-    />
-  ));
-
-  const StyledMenuItem = withStyles((theme) => ({
-    root: {
-      display: 'flex',
-      alignItems: 'center',
-      '&:hover': {
-        backgroundColor: theme.palette.primary.main,
-        '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-          color: theme.palette.common.white,
-        },
-      },
-    },
-  }))(MenuItem);
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <Detail>
       {!loading && mode === 'normal' && (
@@ -274,30 +232,18 @@ const DetailPresenter = (props) => {
 
           <ParticipantsListTitle>참여자 목록</ParticipantsListTitle>
           <ParticipantsListDiv>
-            {user.id === my_id &&
+            {user.id === my_id && // 일정에 대한 권한을 가지고 있는 경우
               member?.map((m, index) => (
-                <ParticipantsListItemDiv>
-                  <Button
-                    aria-controls="customized-menu"
-                    style={{ marginRight: 8 }}
-                    aria-haspopup="true"
-                    variant="contained"
-                    color="default"
-                    onClick={handleClick}
-                  >
-                    <Avatar style={{ height: 30, width: 30, marginRight: 5 }}>{m.nickname.slice(0, 1).toUpperCase()}</Avatar>
-                    <ParticipantsList key={index}>{m.nickname}</ParticipantsList>
-                  </Button>
-                  <StyledMenu id="customized-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                    <StyledMenuItem onClick={() => onMandateButtonClick(m.id)}>
-                      <i className="fas fa-crown" style={{ marginRight: 7 }}></i>
-                      <ListItemText primary="모든 권한 위임" />
-                    </StyledMenuItem>
-                  </StyledMenu>
-                </ParticipantsListItemDiv>
+                <ParticipantsListComponent
+                  master_id={my_id}
+                  key={index}
+                  user_id={m.id}
+                  user_nickname={m.nickname}
+                  reqScheduleDetail={reqScheduleDetail}
+                />
               ))}
 
-            {user.id !== my_id &&
+            {user.id !== my_id && // 일정에 대한 권한을 가지고 있지 않은 경우
               member?.map((m, index) => (
                 <ParticipantsListItemDiv>
                   <Avatar style={{ height: 30, width: 30 }}>{m.nickname.slice(0, 1).toUpperCase()}</Avatar>

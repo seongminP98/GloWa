@@ -164,6 +164,7 @@ const SchedulePresenter = ({
   scheduleList,
   scheduleInviteList,
   onInvAcceptButtonClick,
+  onInvRejectButtonClick,
 }) => {
   // Popover를 위한  setting
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -263,7 +264,7 @@ const SchedulePresenter = ({
                         <ListItemText primary={`"${s.Users[0].nickname}"님이 "${s.schedule_name}" 일정에 초대하였습니다.`}></ListItemText>
                         <ScheduleInvButtonDiv>
                           <ScheduleInvAcceptButton onClick={() => onInvAcceptButtonClick(s.id, s.my_id)}>수락</ScheduleInvAcceptButton>
-                          <ScheduleInvRejectButton>거절</ScheduleInvRejectButton>
+                          <ScheduleInvRejectButton onClick={() => onInvRejectButtonClick(s.id, s.my_id)}>거절</ScheduleInvRejectButton>
                         </ScheduleInvButtonDiv>
                       </ListItem>
                     ))}
