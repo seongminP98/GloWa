@@ -141,6 +141,23 @@ const ParticipantsListItemDiv = styled.div`
   align-items: center;
 `;
 
+const ExitButton = styled.button`
+  border: none;
+  cursor: pointer;
+  outline: none;
+  width: 80px;
+  background-color: #dd0000;
+  height: 35px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 4px;
+  margin-left: 10px;
+  &:hover {
+    background-color: red;
+  }
+`;
+
 const DetailPresenter = (props) => {
   const { createdAt, date, id, my_id, place, schedule_name, updatedAt, member, master_nickname, loading, user } = props;
   const {
@@ -154,6 +171,7 @@ const DetailPresenter = (props) => {
     onChange,
     onSubmitButtonClick,
     onMandateButtonClick,
+    onExitButtonClick,
   } = props;
 
   const switchDateEngToKor = () => {
@@ -271,7 +289,7 @@ const DetailPresenter = (props) => {
                     <ParticipantsList key={index}>{m.nickname}</ParticipantsList>
                   </Button>
                   <StyledMenu id="customized-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                    <StyledMenuItem onClick={onMandateButtonClick}>
+                    <StyledMenuItem onClick={() => onMandateButtonClick(m.id)}>
                       <i className="fas fa-crown" style={{ marginRight: 7 }}></i>
                       <ListItemText primary="모든 권한 위임" />
                     </StyledMenuItem>
@@ -292,6 +310,11 @@ const DetailPresenter = (props) => {
             <ButtonDiv>
               <ModeToggleToEditButton onClick={onModeToggleButtonClick}>수정</ModeToggleToEditButton>
               <DeleteButton onClick={onDeleteButtonClick}>삭제</DeleteButton>
+            </ButtonDiv>
+          )}
+          {user.id !== my_id && (
+            <ButtonDiv>
+              <ExitButton onClick={onExitButtonClick}>나가기</ExitButton>
             </ButtonDiv>
           )}
         </DetailInfoDiv>

@@ -113,17 +113,29 @@ const DetailContainer = () => {
     if (isValidationChecked) reqModifySchedule();
   };
 
-  const onMandateButtonClick = () => {
+  const onMandateButtonClick = (friend_id) => {
     axios
       .post(
         `${process.env.REACT_APP_SERVER_URL}/schedule/transferSchedule`,
-        { schedule_id: location.pathname.slice(-1) },
+        { schedule_id: location.pathname.slice(-1), friend_id },
         { withCredentials: true }
       )
       .then((response) => {
         reqScheduleDetail();
         window.alert(response.data.message);
       });
+  };
+
+  const onExitButtonClick = () => {
+    const answer = window.confirm('정말로 일정에서 나가시겠습니까? ');
+    if (answer)
+      axios
+        .delete(`${process.env.REACT_APP_SERVER_URL}/schedule/exit/${location.pathname.slice(-1)}`, { withCredentials: true })
+        .then((response) => {
+          window.alert(response.data.message);
+          history.push({ pathname: '/schedule' });
+        })
+        .catch((err) => console.error(err));
   };
 
   return (
@@ -141,6 +153,7 @@ const DetailContainer = () => {
       loading={loading}
       user={user}
       onMandateButtonClick={onMandateButtonClick}
+      onExitButtonClick={onExitButtonClick}
     />
   );
 };
