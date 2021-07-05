@@ -345,10 +345,10 @@ router.post('/transferSchedule', async(req,res,next)=>{
         }
     }
     
-    if(schedule.my_id !== req.body.id){
+    if(schedule.my_id !== req.user.id){
         return res.status(200).send({code:200, message:'이 일정에 대한 권한양도를 할 권한이 없습니다.'});
     }
-    else if(req.body.id===req.body.other_id){
+    else if(req.user.id===req.body.other_id){
         return res.status(200).send({code:200, message:'자기 자신한테는 권한을 넘길 수 없습니다.'});
     } 
     else{
