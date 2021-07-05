@@ -177,7 +177,7 @@ router.get('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목�
         for(let i=0; i<schedule.length; i++){
             let s = await Schedule.findOne({
                 where:{
-                    my_id: schedule[i].my_id //스케줄 초대한 사람의 id
+                    id: schedule[i].schedule_id //스케줄 초대한 사람의 id
                 },
                 include:[
                     {model: User, required: true, attributes:['nickname']}
