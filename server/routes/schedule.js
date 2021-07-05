@@ -73,6 +73,10 @@ router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
 
         }
     }
+    list.sort((a,b)=>{
+        return a.date - b.date;
+    });
+    
     let ml = [];
     for(let i=0; i<list.length; i++){
         let memberList = [];
@@ -82,7 +86,7 @@ router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
             }
         })
         let member = await sche.getUsers();
-        console.log("길이",member.length)
+        //console.log("길이",member.length)
         for(let j=0; j<member.length; j++){
             let mem = new Object();
             mem.id = member[j].dataValues.id,
