@@ -368,6 +368,32 @@ router.post('/transferSchedule', async(req,res,next)=>{
     }
 })
 
+router.post('/kick', async(req,res,next)=>{
+    let schedule = await Schedule.findOne({
+        where:{
+            id: req.body.schedule_id
+        }
+    })
+    let check = false;
+    if(schedule.dataValues.my_id === req.user.id){
+        check = true;
+    }
+    if(!check){
+        return res.status(200).send({code:200, message:'추방할 권한이 없습니다.'});
+    }
+    if(req.user.id === req.body.target_id){
+        return res.status(200).send({code:200, message:'자기 자신은 추방할 수 없습니다.'});
+    }
+
+    let target = await User.findOne({
+        where:{
+            id: req.body.target_id
+        }
+    })
+    target.removeSchedules(schedule);
+    res.status(200).send({code:200,message:'추방되었습니다.'});
+})
+
 router.get('/:schedule_id', async(req,res,next)=>{
     let schedule = await Schedule.findOne({
         where:{
