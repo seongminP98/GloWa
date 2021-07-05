@@ -177,8 +177,13 @@ router.get('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목�
                     {model: User, required: true, attributes:['nickname']}
                 ]
             })
-
-            list.push(s);
+            let master = await User.findOne({
+                where:{
+                    id:schedule[i].dataValues.my_id
+                }
+            })
+            list.push(s.dataValues);
+            list[i].master_nickname = master.dataValues.nickname
         }
     }
 
