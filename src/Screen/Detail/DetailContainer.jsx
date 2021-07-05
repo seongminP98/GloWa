@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import DetailPresenter from './DetailPresenter';
 import dateF from 'date-and-time';
+import store from '../../store';
 
 const DetailContainer = () => {
   const history = useHistory();
@@ -25,9 +26,8 @@ const DetailContainer = () => {
   };
 
   useEffect(() => reqScheduleDetail(), []);
-
+  const user = store.getState().user;
   const [mode, setMode] = useState('normal');
-
   const [isValidationChecked, setIsValidationChecked] = useState(true);
   const [editedName, setEditedName] = useState();
   const [editedDate, setEditedDate] = useState();
@@ -113,6 +113,19 @@ const DetailContainer = () => {
     if (isValidationChecked) reqModifySchedule();
   };
 
+  const onMandateButtonClick = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/schedule/transferSchedule`,
+        { schedule_id: location.pathname.slice(-1) },
+        { withCredentials: true }
+      )
+      .then((response) => {
+        reqScheduleDetail();
+        window.alert(response.data.message);
+      });
+  };
+
   return (
     <DetailPresenter
       {...props}
@@ -126,6 +139,8 @@ const DetailContainer = () => {
       onChange={onChange}
       onSubmitButtonClick={onSubmitButtonClick}
       loading={loading}
+      user={user}
+      onMandateButtonClick={onMandateButtonClick}
     />
   );
 };

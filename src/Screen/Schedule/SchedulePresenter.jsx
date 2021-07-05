@@ -115,7 +115,56 @@ const ScheduleListContentsDiv = styled.div`
   grid-gap: 50px;
 `;
 
-const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonClick, mode, onModeTogglebuttonClick, scheduleList }) => {
+const ScheduleInvButtonDiv = styled.div`
+  margin-left: 10px;
+`;
+
+const ScheduleInvRejectButton = styled.button`
+  border: none;
+  cursor: pointer;
+  outline: none;
+  width: 70px;
+  background-color: #dd0000;
+  height: 30px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 4px;
+  margin-left: 10px;
+  &:hover {
+    background-color: red;
+  }
+`;
+
+const ScheduleInvAcceptButton = styled.button`
+  border: none;
+  cursor: pointer;
+  outline: none;
+  width: 70px;
+  background-color: #2962ff;
+  height: 30px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 4px;
+  &:hover {
+    background-color: #0039cb;
+  }
+`;
+
+const SchedulePresenter = ({
+  onChange,
+  name,
+  time,
+  date,
+  place,
+  onSubmitButtonClick,
+  mode,
+  onModeTogglebuttonClick,
+  scheduleList,
+  scheduleInviteList,
+  onInvAcceptButtonClick,
+}) => {
   // Popover를 위한  setting
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -161,7 +210,19 @@ const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonCl
             </ToggleButton>
             {/* 일정 초대 목록 보여주기 */}
             <InviteListDiv>
-              <Badge badgeContent={4} color="error" style={{ height: 40 }}>
+              {scheduleInviteList.length !== 0 ? (
+                <Badge badgeContent={scheduleInviteList.length} color="error" style={{ height: 40 }}>
+                  <Button
+                    color="primary"
+                    style={{ height: '100%', fontSize: 19 }}
+                    aria-describedby={_id}
+                    variant="contained"
+                    onClick={handleClick}
+                  >
+                    <i className="far fa-bell"></i>
+                  </Button>
+                </Badge>
+              ) : (
                 <Button
                   color="primary"
                   style={{ height: '100%', fontSize: 19 }}
@@ -171,7 +232,8 @@ const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonCl
                 >
                   <i className="far fa-bell"></i>
                 </Button>
-              </Badge>
+              )}
+
               <Popover
                 id={_id}
                 open={open}
@@ -190,18 +252,21 @@ const SchedulePresenter = ({ onChange, name, time, date, place, onSubmitButtonCl
                   style={{ fontFamily: 'MaplestoryOTFBold', minWidth: 350 }}
                   subheader={<ListSubheader style={{ fontFamily: 'MaplestoryOTFBold', color: '#000000' }}>일정 초대 목록</ListSubheader>}
                 >
-                  <ListItem>
-                    <ListItemText primary="Hello"></ListItemText>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText primary="Hello"></ListItemText>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText primary="Hello"></ListItemText>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText primary="Hello"></ListItemText>
-                  </ListItem>
+                  {scheduleInviteList.length === 0 && (
+                    <ListItem>
+                      <ListItemText primary="초대받은 일정이 없습니다."></ListItemText>
+                    </ListItem>
+                  )}
+                  {scheduleInviteList.length !== 0 &&
+                    scheduleInviteList.map((s, index) => (
+                      <ListItem>
+                        <ListItemText primary={`"${s.Users[0].nickname}"님이 "${s.schedule_name}" 일정에 초대하였습니다.`}></ListItemText>
+                        <ScheduleInvButtonDiv>
+                          <ScheduleInvAcceptButton onClick={() => onInvAcceptButtonClick(s.id, s.my_id)}>수락</ScheduleInvAcceptButton>
+                          <ScheduleInvRejectButton>거절</ScheduleInvRejectButton>
+                        </ScheduleInvButtonDiv>
+                      </ListItem>
+                    ))}
                 </List>
               </Popover>
             </InviteListDiv>

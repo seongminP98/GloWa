@@ -16,7 +16,7 @@ const FriendsResultContainer = ({ id: req_id, nickname, is_req, isDetailScreen }
         { schedule_id: location.pathname.slice(-1), friend_id: req_id },
         { withCredentials: true }
       )
-      .then((response) => console.log(response))
+      .then((response) => window.alert(response.data.message))
       .catch((err) => console.error(err));
   };
   return (
