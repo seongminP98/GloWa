@@ -198,7 +198,7 @@ router.get('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목�
 router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
     let inv= await InvSchedule.findOne({
         where:{
-            schedule_id: req.body.schedule_id, //초대받은 스케줄 아이디  //초대받은 스케줄목록에 있는 invId
+            schedule_id: req.body.schedule_id, //초대받은 스케줄 아이디  //초대받은 스케줄목록에 있는 schedule_id
             my_id: req.body.friend_id,  //초대한 친구 아이디 
             friend_id: req.user.id   //내 아이디
         }
@@ -216,9 +216,9 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
 
     await InvSchedule.destroy({
         where:{
-            id: inv.id,
+            schedule_id: inv.schedule_id,
             my_id: req.body.friend_id, //초대한 사람 아이디
-            friend_id: req.body.id
+            friend_id: req.user.id
         }
     })
     res.status(200).send({code: 200, message: '일정 수락 완료'});
