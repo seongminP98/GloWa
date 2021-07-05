@@ -224,6 +224,29 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
     res.status(200).send({code: 200, message: '일정 수락 완료'});
 })
 
+router.post('/reject', async(req, res,next)=>{
+    let inv= await InvSchedule.findOne({
+        where:{
+            schedule_id: req.body.schedule_id, //초대받은 스케줄 아이디  //초대받은 스케줄목록에 있는 schedule_id
+            my_id: req.body.friend_id,  //초대한 친구 아이디 
+            friend_id: req.user.id   //내 아이디
+        }
+    })
+    if(!inv){
+        return res.status(400).send({code:400, message:'잘못된 접근입니다.'});
+    }
+
+    await InvSchedule.destroy({
+        where:{
+            schedule_id: inv.schedule_id,
+            my_id: req.body.friend_id, //초대한 사람 아이디
+            friend_id: req.user.id
+        }
+    })
+    res.status(200).send({code: 200, message: '일정 거절 완료'});
+
+})
+
 router.delete('/delete/:schedule_id', async(req,res,next)=>{ //스케줄 만든사람이 스케줄 삭제
     let schedule = await Schedule.findOne({
         where:{
