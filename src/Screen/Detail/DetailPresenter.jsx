@@ -246,7 +246,9 @@ const DetailPresenter = (props) => {
             {user.id !== my_id && // 일정에 대한 권한을 가지고 있지 않은 경우
               member?.map((m, index) => (
                 <ParticipantsListItemDiv>
-                  <Avatar style={{ height: 30, width: 30 }}>{m.nickname.slice(0, 1).toUpperCase()}</Avatar>
+                  <Avatar style={{ height: 30, width: 30 }}>
+                    {m.id !== my_id ? m.nickname.slice(0, 1).toUpperCase() : <i className="fas fa-crown" style={{ fontSize: 13 }}></i>}
+                  </Avatar>
                   <ParticipantsList key={index}>{m.nickname}</ParticipantsList>
                 </ParticipantsListItemDiv>
               ))}
