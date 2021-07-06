@@ -28,11 +28,13 @@ const Favorites = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: -20px;
   font-family: 'MaplestoryOTFBold';
 `;
 const Title = styled.div`
   margin: 20px 0px 30px 0px;
   font-size: 25px;
+  position: sticky;
 `;
 
 const MainDiv = styled.div`
@@ -41,11 +43,14 @@ const MainDiv = styled.div`
 `;
 
 const FavList = styled.div`
+  margin-top: 70px;
   height: 600px;
   margin-right: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: scroll;
+  overflow-x: hidden;
 `;
 
 const InfoDiv = styled.div``;
