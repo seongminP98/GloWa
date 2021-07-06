@@ -28,11 +28,13 @@ const Favorites = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: -20px;
   font-family: 'MaplestoryOTFBold';
 `;
 const Title = styled.div`
   margin: 20px 0px 30px 0px;
   font-size: 25px;
+  position: sticky;
 `;
 
 const MainDiv = styled.div`
@@ -41,17 +43,48 @@ const MainDiv = styled.div`
 `;
 
 const FavList = styled.div`
+  margin-top: 70px;
   height: 600px;
   margin-right: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: scroll;
+  overflow-x: hidden;
 `;
 
-const InfoDiv = styled.div``;
+const DeleteButton = styled.button`
+  border: none;
+  cursor: pointer;
+  outline: none;
+  width: 60px;
+  background-color: #dd0000;
+  height: 30px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 4px;
+  margin-left: 10px;
+  &:hover {
+    background-color: red;
+  }
+  align-self: flex-end;
+`;
 
-const FavoritesPresenter = ({ location, loading, favList, getLocation }) => {
-  const classes = useStyles();
+const InfoDiv = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+`;
+
+const EmptyList = styled.div`
+  width: 600px;
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+`;
+
+const FavoritesPresenter = ({ location, loading, favList, getLocation, onDeleteButtonClick }) => {
   const [expanded, setExpanded] = React.useState('panel0');
 
   const handleChange = (panel, address) => (event, isExpanded) => {
@@ -59,39 +92,51 @@ const FavoritesPresenter = ({ location, loading, favList, getLocation }) => {
     getLocation(address);
   };
 
-  return (
-    !loading && (
-      <Favorites>
-        <MainDiv>
-          <FavList>
-            <Title>내 즐겨찾기 목록</Title>
-            {favList.map((f, index) => (
-              <Accordion
-                key={index}
-                style={{ width: 600 }}
-                expanded={expanded === `panel${index}`}
-                onChange={handleChange(`panel${index}`, f.address)}
+  return !loading && favList.length !== 0 ? (
+    <Favorites>
+      <MainDiv>
+        <FavList>
+          <Title>내 즐겨찾기 목록</Title>
+          {favList.map((f, index) => (
+            <Accordion
+              key={index}
+              style={{ width: 600 }}
+              expanded={expanded === `panel${index}`}
+              onChange={handleChange(`panel${index}`, f.address)}
+            >
+              <AccordionSummary
+                expandIcon={<i className="fas fa-chevron-down" style={{ fontSize: 14 }}></i>}
+                aria-controls={`panel${index}a-content`}
+                id={`panel${index}a-header`}
               >
-                <AccordionSummary
-                  expandIcon={<i className="fas fa-chevron-down" style={{ fontSize: 14 }}></i>}
-                  aria-controls={`panel${index}a-content`}
-                  id={`panel${index}a-header`}
-                >
-                  <Typography>{f.restaurant}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <InfoDiv>
-                    <Typography>{f.address}</Typography>
-                    <Typography>{f.kind}</Typography>
-                  </InfoDiv>
-                </AccordionDetails>
-              </Accordion>
-            ))}
-          </FavList>
-          <Map location={location} center={location[0]} mode="single" />
-        </MainDiv>
-      </Favorites>
-    )
+                <Typography>{f.restaurant}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <InfoDiv>
+                  <Typography>{f.address}</Typography>
+                  <Typography>{f.kind}</Typography>
+                  <DeleteButton onClick={onDeleteButtonClick}>
+                    <input id="user_id" type="hidden" value={f.id} />
+                    삭제
+                  </DeleteButton>
+                </InfoDiv>
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </FavList>
+        <Map location={location} center={location[0]} mode="single" />
+      </MainDiv>
+    </Favorites>
+  ) : (
+    <Favorites>
+      <MainDiv>
+        <FavList>
+          <Title>내 즐겨찾기 목록</Title>
+          <EmptyList>즐겨찾기에 추가한 장소가 없습니다.</EmptyList>
+        </FavList>
+        <Map location={[]} center={[]} mode="single" />
+      </MainDiv>
+    </Favorites>
   );
 };
 
