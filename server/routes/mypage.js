@@ -16,7 +16,7 @@ router.post('/favorites/add',async (req,res,next)=>{
         }
     })
     if(already_check.length>0){
-        res.status(200).send({code: 200, message : '이미 추가한 장소입니다.'});
+        return res.status(200).send({code: 200, message : '이미 추가한 장소입니다.'});
     }
 
     await Favorites.create({
@@ -36,9 +36,9 @@ router.get('/favorites/list', async (req,res,next)=>{
         }
     })
     if(list.length>0){
-        res.status(200).send({code: 200, result: list});
+        return res.status(200).send({code: 200, result: list});
     } else{
-        res.status(200).send({code: 200, message: '즐겨찾기 리스트가 비어있습니다.'})
+        return res.status(200).send({code: 200, message: '즐겨찾기 리스트가 비어있습니다.'})
     }
 })
 
