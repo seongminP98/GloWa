@@ -1,6 +1,8 @@
 /*global kakao*/
+import axios from 'axios';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import InfoWindow from '../InfoWindow';
 
 // 지도를 위한 div
 const MapContent = styled.div`
@@ -31,10 +33,20 @@ const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, g
         <div>${p.distance}m</div>
       </div>
 
+
       <div style="display:flex ;align-items:center; margin-top : 5px">
         <a href="https://map.kakao.com/link/map/${p.id}" style="color:blue;text-decoration : none" target="_blank">길찾기</a>
-        <form style="margin-left :5px" method="POST"><button type="submit">⭐즐겨찾기 추가</button></form>
+
+          <button class="favAddButton" onclick="(() => 
+          axios
+          .post('${process.env.REACT_APP_SERVER_URL}/mypage/favorites/add',{ restaurant:'${p.title}', address:'${p.address}', kind:'${
+    p.category
+  }'} ,{ withCredentials: true })
+          .then((response) => window.alert(response.data.message))
+          .catch((err) => console.error(err))
+        )()">⭐즐겨찾기 추가</button>
       </div>
+      
     </div>
   </div>`;
 
