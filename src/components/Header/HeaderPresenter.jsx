@@ -83,6 +83,7 @@ const HeaderPresenter = ({ user, onLogoutClick, scheduleModeToggleButton }) => {
       <Menu>
         {user ? (
           <>
+            <StyledLink to="favorites">즐겨찾기</StyledLink>
             <ScheduleModeButton onClick={scheduleModeToggleButton}>일정관리</ScheduleModeButton>
             <LogoutButton onClick={onLogoutClick}>로그아웃</LogoutButton>
           </>

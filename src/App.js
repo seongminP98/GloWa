@@ -4,6 +4,7 @@ import MainPage from './Screen/MainPage';
 import Login from './Screen/Login';
 import Detail from './Screen/Detail';
 import Join from './Screen/Join';
+import Favorites from './Screen/Favorites';
 import Schedule from './Screen/Schedule';
 import FriendsList from './components/FriendsList';
 
@@ -64,6 +65,9 @@ function App() {
           </Route>
           <Route exact path="/schedule">
             <Schedule />
+          </Route>
+          <Route exact path="/favorites">
+            <Favorites />
           </Route>
           <Route exact path="/login">
             <Login />

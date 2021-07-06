@@ -1,8 +1,6 @@
 /*global kakao*/
-import axios from 'axios';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import InfoWindow from '../InfoWindow';
 
 // 지도를 위한 div
 const MapContent = styled.div`
