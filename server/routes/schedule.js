@@ -410,6 +410,7 @@ router.get('/:schedule_id', async(req,res,next)=>{
         }
         member.id = memberCheck[i].dataValues.id;
         member.nickname = memberCheck[i].dataValues.nickname;
+        member.image = memberCheck[i].dataValues.image;
         members.push(member);   
     }
     if(!check){
