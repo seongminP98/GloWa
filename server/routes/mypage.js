@@ -43,10 +43,10 @@ router.get('/favorites/list', async (req,res,next)=>{
     }
 })
 
-router.delete('/favorites/delete', async(req,res,next)=>{
+router.delete('/favorites/delete/:favorite_id', async(req,res,next)=>{
     await Favorites.destroy({
         where:{
-            id: req.body.favorite_id,
+            id: req.params.favorite_id,
         }
     })
     res.status(200).send({code: 200, message: '삭제되었습니다.'});
