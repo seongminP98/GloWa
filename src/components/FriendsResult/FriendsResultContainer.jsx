@@ -3,43 +3,24 @@ import React from 'react';
 import FriendsResultPresenter from './FriendsResultPresenter';
 import store from '../../store';
 import { useHistory } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
-const FriendsResultContainer = ({ id: req_id, nickname, is_req }) => {
+const FriendsResultContainer = ({ id: req_id, nickname, is_req, isDetailScreen }) => {
   const history = useHistory();
-  const user = store.getState().user;
+  const location = useLocation();
 
-  const onAcceptButtonClick = async (e) => {
-    e.preventDefault();
-    const user = await store.getState().user;
-    if (!user) return;
-    const req_id = e.target.parentNode.req_id.value;
-    await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/friend/accept`, { id: user.id, req_id })
-      .then(() => console.log('정상적으로 친구 추가되었습니다!'))
-      .catch((err) => window.alert('에러가 발생했습니다 !'));
-  };
-
-  const FriendAddbuttonClick = async (e) => {
-    const user = await store.getState().user;
-    if (!user) {
-      window.alert('로그인을 해주세요!');
-      return history.push({ pathname: '/login' });
-    }
-    if (user.id === req_id) return window.alert('자기 자신에게는 친구 요청을 할 수 없습니다.');
-    await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/friend/add`, { id: user.id, req_id })
+  const onInviteButtonClick = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/schedule/invite`,
+        { schedule_id: location.pathname.slice(-1), friend_id: req_id },
+        { withCredentials: true }
+      )
       .then((response) => window.alert(response.data.message))
-      .catch((err) => console.error(err.response));
+      .catch((err) => console.error(err));
   };
-
   return (
-    <FriendsResultPresenter
-      id={req_id}
-      nickname={nickname}
-      FriendAddbuttonClick={FriendAddbuttonClick}
-      onAcceptButtonClick={onAcceptButtonClick}
-      user={user}
-    />
+    <FriendsResultPresenter id={req_id} nickname={nickname} isDetailScreen={isDetailScreen} onInviteButtonClick={onInviteButtonClick} />
   );
 };
 

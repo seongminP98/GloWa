@@ -41,6 +41,7 @@ const FriendSearchResultPresenter = ({ id, nickname, FriendAddbuttonClick, is_re
           <RejectButton>거절</RejectButton>
         </ReqForm>
       ) : (
+        //본인이 아니거나 친구가 아닌 경우에만 출력
         user?.id !== id &&
         (!is_my_friend || is_my_friend.nickname !== nickname) && <FriendAddButton onClick={FriendAddbuttonClick}>친구 추가</FriendAddButton>
       )}

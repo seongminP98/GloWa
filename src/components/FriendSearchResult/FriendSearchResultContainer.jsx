@@ -14,7 +14,7 @@ const FriendSearchResultContainer = ({ id: req_id, nickname, is_req, refreshList
     if (!user) return;
     const req_id = e.target.parentNode.req_id.value;
     await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/friend/accept`, { id: user.id, req_id })
+      .post(`${process.env.REACT_APP_SERVER_URL}/friend/accept`, { id: user.id, req_id }, { withCredentials: true })
       .then(() => {
         refreshList();
         window.alert('정상적으로 친구 추가되었습니다!');
@@ -30,7 +30,7 @@ const FriendSearchResultContainer = ({ id: req_id, nickname, is_req, refreshList
     }
     if (user.id === req_id) return window.alert('자기 자신에게는 친구 요청을 할 수 없습니다.');
     await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/friend/add`, { id: user.id, req_id })
+      .post(`${process.env.REACT_APP_SERVER_URL}/friend/add`, { id: user.id, req_id }, { withCredentials: true })
       .then((response) => window.alert(response.data.message))
       .catch((err) => console.error(err.response));
   };

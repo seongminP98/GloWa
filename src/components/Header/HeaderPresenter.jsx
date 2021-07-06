@@ -45,7 +45,7 @@ const StyledLink = styled(Link)`
 
 const ScheduleModeButton = styled.button`
   margin: 0px 10px;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 400;
   border: none;
   font-family: 'MaplestoryOTFBold';
@@ -56,7 +56,7 @@ const ScheduleModeButton = styled.button`
 const LogoutButton = styled.button`
   margin: 0px 10px;
   font-family: 'MaplestoryOTFBold';
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 400;
   border: none;
   cursor: pointer;
@@ -83,6 +83,7 @@ const HeaderPresenter = ({ user, onLogoutClick, scheduleModeToggleButton }) => {
       <Menu>
         {user ? (
           <>
+            <StyledLink to="favorites">즐겨찾기</StyledLink>
             <ScheduleModeButton onClick={scheduleModeToggleButton}>일정관리</ScheduleModeButton>
             <LogoutButton onClick={onLogoutClick}>로그아웃</LogoutButton>
           </>

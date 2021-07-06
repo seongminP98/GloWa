@@ -1,7 +1,8 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import FriendSearchResult from '../FriendSearchResult';
-import FriednsResult from '../FriendsResult';
+import FriendsResult from '../FriendsResult';
 
 const FriendsListMainDiv = styled.div`
   padding: 10px;
@@ -98,9 +99,9 @@ const FriendsListPresenter = ({
   user,
   redirectToLoginPage,
 }) => {
+  const location = useLocation();
   return (
     <FriendsListMainDiv>
-
       {user ? (
         // 로그인이 되어있는 경우
         <>
@@ -119,7 +120,12 @@ const FriendsListPresenter = ({
                 //친구목록이 비어있지 않은 경우
                 <div>
                   {friendList?.map((r, index) => (
-                    <FriednsResult key={index} id={r.id} nickname={r.nickname} />
+                    <FriendsResult
+                      key={index}
+                      id={r.id}
+                      nickname={r.nickname}
+                      isDetailScreen={location.pathname.startsWith('/schedule/detail')} // Detail 화면인 경우 친구를 일정에 추가하는 버튼을 생성한다.
+                    />
                   ))}
                 </div>
               ) : (
@@ -162,7 +168,6 @@ const FriendsListPresenter = ({
           <RedirectionButton onClick={redirectToLoginPage}>로그인 페이지로 이동하기</RedirectionButton>
         </NotLoggedWarnnigDiv>
       )}
-
     </FriendsListMainDiv>
   );
 };

@@ -3,8 +3,8 @@ const Sequelize = require('sequelize');
 module.exports = class InvSchedule extends Sequelize.Model {
     static init(sequelize){
         return super.init({    //스케줄 초대 테이블
-            schedule_name: {    //스케줄 이름
-                type: Sequelize.STRING(20),
+            schedule_id: {    //스케줄 아이디
+                type:Sequelize.INTEGER,
                 allowNull: false,
             },
             my_id: {    //초대한 사람 아이디
