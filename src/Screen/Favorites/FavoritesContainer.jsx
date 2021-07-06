@@ -10,9 +10,8 @@ const FavoritesContainer = () => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/mypage/favorites/list`, { withCredentials: true })
       .then((response) => {
-        console.log(response);
-        setFavList(response.data.result);
-        getLocation(response.data.result[0].address);
+        setFavList(response.data.result ? response.data.result : []);
+        if (favList !== []) getLocation(response.data.result[0].address);
       })
       .catch((err) => console.error(err));
   };
@@ -31,10 +30,28 @@ const FavoritesContainer = () => {
       .catch((err) => console.error(err));
   };
 
+  const onDeleteButtonClick = (e) => {
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_URL}/mypage/favorites/delete/${e.target.firstChild.value}`, { withCredentials: true })
+      .then((response) => {
+        window.alert(response.data.message);
+        getFavList();
+      })
+      .catch((err) => console.error(err));
+  };
+
   useEffect(() => {
     getFavList();
   }, []);
-  return <FavoritesPresenter favList={favList} location={location} loading={loading} getLocation={getLocation} />;
+  return (
+    <FavoritesPresenter
+      favList={favList}
+      location={location}
+      loading={loading}
+      getLocation={getLocation}
+      onDeleteButtonClick={onDeleteButtonClick}
+    />
+  );
 };
 
 export default FavoritesContainer;

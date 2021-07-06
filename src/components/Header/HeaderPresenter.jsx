@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
+import HeaderUserIcon from '../HeaderUserIcon';
 const Header = styled.header`
   height: 120px;
 
@@ -83,6 +83,7 @@ const HeaderPresenter = ({ user, onLogoutClick, scheduleModeToggleButton }) => {
       <Menu>
         {user ? (
           <>
+            <HeaderUserIcon user={user} />
             <StyledLink to="favorites">즐겨찾기</StyledLink>
             <ScheduleModeButton onClick={scheduleModeToggleButton}>일정관리</ScheduleModeButton>
             <LogoutButton onClick={onLogoutClick}>로그아웃</LogoutButton>
