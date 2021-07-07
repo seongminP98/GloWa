@@ -15,7 +15,7 @@ const HeaderUserIconContainer = (props) => {
         withCredentials: true,
       })
       .then((response) => {
-        store.dispatch({ type: 'LOGIN', user: { ...user, img: response.data.result } });
+        store.dispatch({ type: 'USER_UPDATED', user: { ...user, img: response.data.result } });
       });
   };
   const onImgChangeButtonClick = async () => {
