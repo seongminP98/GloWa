@@ -5,7 +5,6 @@ import store from '../../store';
 
 const HeaderUserIconContainer = (props) => {
   const { user } = props;
-  console.log(user);
   const onChange = (e) => {
     const formData = new FormData();
     formData.append('img', e.target.files[0]);

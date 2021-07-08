@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListItemText, Button, Badge, withStyles, Menu, MenuItem, Avatar } from '@material-ui/core';
-
+import styled from 'styled-components';
 const HeaderUserIconPresenter = ({ user, onImgChangeButtonClick, onChange }) => {
   const StyledMenu = withStyles({
     paper: {
@@ -21,6 +21,16 @@ const HeaderUserIconPresenter = ({ user, onImgChangeButtonClick, onChange }) => 
       {...props}
     />
   ));
+
+  const ParticipantsList = styled.div`
+    margin-left: 5px;
+    margin-right: 10px;
+  `;
+
+  const ParticipantsListItemDiv = styled.div`
+    display: flex;
+    align-items: center;
+  `;
 
   const StyledMenuItem = withStyles((theme) => ({
     root: {
@@ -44,22 +54,16 @@ const HeaderUserIconPresenter = ({ user, onImgChangeButtonClick, onChange }) => 
   const handleClose = () => {
     setAnchorEl(null);
   };
+  console.log(user);
+  console.log(Image);
 
   return (
     <div>
-      <Button
-        aria-controls="customized-menu"
-        style={{ marginRight: 8 }}
-        aria-haspopup="true"
-        variant="contained"
-        color="default"
-        onClick={handleClick}
-      >
-        <Avatar style={{ height: 30, width: 30, marginRight: 5 }}>
-          {user.image ? <img src={`${user.image}`} /> : user.nickname.slice(0, 1).toUpperCase()}
-        </Avatar>
-        <div>{user.nickname}</div>
-      </Button>
+      <ParticipantsListItemDiv>
+        <Avatar style={{ height: 30, width: 30 }}>{user.nickname.slice(0, 1).toUpperCase()}</Avatar>
+        <ParticipantsList>{user.nickname}</ParticipantsList>
+      </ParticipantsListItemDiv>
+
       <StyledMenu id="customized-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
         <StyledMenuItem className="browse-btn" onClick={onImgChangeButtonClick}>
           <i className="far fa-image" style={{ marginRight: 10 }}></i>
