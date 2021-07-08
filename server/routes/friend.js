@@ -8,7 +8,7 @@ const User = require('../models/user');
 
 router.post('/search', async (req,res,next)=>{
     let list = await User.findAll({
-        attributes:['id','nickname'],
+        attributes:['id','nickname','image'],
         where:{ 
             nickname:{
                 [Op.like]: `%${req.body.req_nickname}%` //검색할 닉네임
