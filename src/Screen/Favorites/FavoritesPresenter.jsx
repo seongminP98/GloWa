@@ -6,6 +6,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,6 +85,17 @@ const EmptyList = styled.div`
   justify-content: center;
 `;
 
+const ButtonDiv = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const GetDirectionLink = styled.a`
+  text-decoration: none;
+  margin-top: 20px;
+`;
+
 const FavoritesPresenter = ({ location, loading, favList, getLocation, onDeleteButtonClick }) => {
   const [expanded, setExpanded] = React.useState('panel0');
 
@@ -109,16 +121,21 @@ const FavoritesPresenter = ({ location, loading, favList, getLocation, onDeleteB
                 aria-controls={`panel${index}a-content`}
                 id={`panel${index}a-header`}
               >
-                <Typography>{f.restaurant}</Typography>
+                <Typography style={{ fontFamily: 'MaplestoryOTFBold', fontSize: 19 }}>{f.restaurant}</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <InfoDiv>
-                  <Typography>{f.address}</Typography>
-                  <Typography>{f.kind}</Typography>
-                  <DeleteButton onClick={onDeleteButtonClick}>
-                    <input id="user_id" type="hidden" value={f.id} />
-                    삭제
-                  </DeleteButton>
+                  <Typography style={{ fontFamily: 'MaplestoryOTFBold' }}>{f.address}</Typography>
+                  <Typography style={{ fontFamily: 'MaplestoryOTFBold' }}>{f.kind}</Typography>
+                  <ButtonDiv>
+                    <GetDirectionLink href={`https://map.naver.com/v5/search/${f.restaurant}`} target="_blank">
+                      길찾기
+                    </GetDirectionLink>
+                    <DeleteButton onClick={onDeleteButtonClick}>
+                      <input id="user_id" type="hidden" value={f.id} />
+                      삭제
+                    </DeleteButton>
+                  </ButtonDiv>
                 </InfoDiv>
               </AccordionDetails>
             </Accordion>

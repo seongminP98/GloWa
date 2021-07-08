@@ -1,11 +1,17 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import FavoritesPresenter from './FavoritesPresenter';
+import store from '../../store';
+import { useHistory } from 'react-router-dom';
 
 const FavoritesContainer = () => {
+  const history = useHistory();
   const [location, setLocation] = useState();
   const [loading, setLoading] = useState(true);
   const [favList, setFavList] = useState([]);
+  const user = store.getState().user;
+  if (!user) history.push({ pathname: '/' });
+
   const getFavList = () => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/mypage/favorites/list`, { withCredentials: true })

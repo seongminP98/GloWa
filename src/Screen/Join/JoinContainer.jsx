@@ -9,8 +9,9 @@ const JoinContainer = () => {
   const [nickname, setNickname] = useState();
   const [password, setPassword] = useState();
   const [passwordCheck, setPasswordCheck] = useState();
-
   const history = useHistory();
+  const user = store.getState().user;
+  if (user) history.push({ pathname: '/' });
 
   const props = { id, nickname, password, passwordCheck };
 

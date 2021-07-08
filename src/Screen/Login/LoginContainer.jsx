@@ -5,10 +5,12 @@ import store from '../../store';
 import LoginPresenter from './LoginPresenter';
 
 const LoginContainer = () => {
+  const user = store.getState().user;
   const [id, setId] = useState();
   const [password, setPassword] = useState();
   const props = { id, password };
   const history = useHistory();
+  if (user) history.push({ pathname: '/' });
 
   const onChange = (e) => {
     const elementId = e.target.id;

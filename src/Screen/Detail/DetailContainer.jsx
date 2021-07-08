@@ -10,11 +10,17 @@ const DetailContainer = () => {
   const location = useLocation();
   const [props, setProps] = useState();
   const [loading, setLoading] = useState(true);
+  const user = store.getState().user;
+  if (!user) history.push({ pathname: '/' });
+
   const reqScheduleDetail = async () => {
     await axios
       .get(`${process.env.REACT_APP_SERVER_URL}/schedule/${location.pathname.slice(-1)}`, { withCredentials: true })
       .then(async (response) => {
-        console.log(response);
+        if (response.data.message) {
+          window.alert(response.data.message);
+          return history.push({ pathname: '/' });
+        }
         setProps(response.data.result);
         setEditedName(response.data.result.schedule_name);
         setEditedDate(dateF.format(new Date(response.data.result.date), 'YYYY-MM-DD'));
@@ -26,7 +32,6 @@ const DetailContainer = () => {
   };
 
   useEffect(() => reqScheduleDetail(), []);
-  const user = store.getState().user;
   const [mode, setMode] = useState('normal');
   const [isValidationChecked, setIsValidationChecked] = useState(true);
   const [editedName, setEditedName] = useState();

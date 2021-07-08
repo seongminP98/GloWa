@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Avatar } from '@material-ui/core';
 
 const MainDiv = styled.div`
   height: 40px;
@@ -10,7 +11,14 @@ const MainDiv = styled.div`
   margin-top: 5px;
 `;
 
-const NickDiv = styled.div``;
+const NickDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const NicknameDiv = styled.div`
+  margin-left: 5px;
+`;
 
 const FriendAddButton = styled.button`
   border: none;
@@ -33,7 +41,10 @@ const ReqForm = styled.form``;
 const FriendSearchResultPresenter = ({ id, nickname, FriendAddbuttonClick, is_req, onAcceptButtonClick, user, is_my_friend }) => {
   return (
     <MainDiv>
-      <NickDiv>{nickname}</NickDiv>
+      <NickDiv>
+        <Avatar style={{ height: 30, width: 30 }}>{nickname.slice(0, 1).toUpperCase()}</Avatar>
+        <NicknameDiv>{nickname}</NicknameDiv>
+      </NickDiv>
       {is_req ? (
         <ReqForm>
           <input type="hidden" value={id} id="req_id" />

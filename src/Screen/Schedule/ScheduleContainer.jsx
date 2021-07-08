@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import dateF from 'date-and-time';
 import SchedulePresenter from './SchedulePresenter';
 import { useHistory } from 'react-router-dom';
-
+import store from '../../store';
 const ScheduleContainer = () => {
   const [scheduleList, setScheduleList] = useState([]);
   const [scheduleInviteList, setScheduleInviteList] = useState([]);
@@ -14,6 +14,9 @@ const ScheduleContainer = () => {
   const [mode, setMode] = useState('list');
   const [isValidationChecked, setIsValidationChecked] = useState(false);
   const history = useHistory();
+
+  const user = store.getState().user;
+  if (!user) history.push({ pathname: '/' });
 
   const onChange = (e) => {
     const value = e.target.value;

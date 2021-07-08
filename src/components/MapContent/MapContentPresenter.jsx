@@ -32,10 +32,10 @@ const MapContentPresenter = ({ location, restaurantList, mode, getXposAverage, g
       </div>
 
 
-      <div style="display:flex ;align-items:center; margin-top : 5px">
+      <div style="display:flex ;align-items:center; justify-content :space-between; width:100%; margin-top : 5px">
         <a href="https://map.kakao.com/link/map/${p.id}" style="color:blue;text-decoration : none" target="_blank">길찾기</a>
 
-          <button class="favAddButton" onclick="(() => 
+          <button  class="favAddButton" onclick="(() => 
           axios
           .post('${process.env.REACT_APP_SERVER_URL}/mypage/favorites/add',{ restaurant:'${p.title}', address:'${p.address}', kind:'${
     p.category
