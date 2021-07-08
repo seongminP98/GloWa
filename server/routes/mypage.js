@@ -68,7 +68,7 @@ router.post('/image', upload.single('img'), async (req,res,next)=>{ //req.fileë¡
     console.log(req.flie);
     let img = `/img/${req.file.filename}`;
     await User.update(
-        {image: img},
+        {image: req.file},
         {where:{id: req.user.id}}
         )
     res.status(200).send({code:200, result: img});
