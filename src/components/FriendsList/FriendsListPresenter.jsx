@@ -154,7 +154,7 @@ const FriendsListPresenter = ({
             <FriendsListTitle>친구 요청 목록</FriendsListTitle>
             {friendReqList.length !== 0 ? (
               friendReqList.map((r, index) => (
-                <FriendSearchResult refreshList={refreshList} key={index} id={r.id} nickname={r.nickname} is_req={true} />
+                <FriendSearchResult refreshList={refreshList} {...r} key={index} id={r.id} nickname={r.nickname} is_req={true} />
               ))
             ) : (
               <div>친구 요청이 없습니다.</div>
