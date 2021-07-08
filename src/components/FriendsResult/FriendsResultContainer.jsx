@@ -5,7 +5,7 @@ import store from '../../store';
 import { useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
-const FriendsResultContainer = ({ id: req_id, nickname, is_req, isDetailScreen }) => {
+const FriendsResultContainer = ({ id: req_id, nickname, is_req, isDetailScreen, image }) => {
   const history = useHistory();
   const location = useLocation();
 
@@ -20,7 +20,13 @@ const FriendsResultContainer = ({ id: req_id, nickname, is_req, isDetailScreen }
       .catch((err) => console.error(err));
   };
   return (
-    <FriendsResultPresenter id={req_id} nickname={nickname} isDetailScreen={isDetailScreen} onInviteButtonClick={onInviteButtonClick} />
+    <FriendsResultPresenter
+      id={req_id}
+      nickname={nickname}
+      isDetailScreen={isDetailScreen}
+      onInviteButtonClick={onInviteButtonClick}
+      image={image}
+    />
   );
 };
 

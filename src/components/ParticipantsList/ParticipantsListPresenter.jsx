@@ -14,7 +14,7 @@ const ParticipantsList = styled.div`
   margin-right: 10px;
 `;
 
-const ParticipantsListPresenter = ({ master_id, user_id, user_nickname, onMandateButtonClick, onKickButtonClick }) => {
+const ParticipantsListPresenter = ({ master_id, user_id, user_nickname, onMandateButtonClick, onKickButtonClick, image }) => {
   const StyledMenu = withStyles({
     paper: {
       border: '1px solid #d3d4d5',
@@ -68,7 +68,13 @@ const ParticipantsListPresenter = ({ master_id, user_id, user_nickname, onMandat
         color="default"
         onClick={handleClick}
       >
-        <Avatar style={{ height: 30, width: 30, marginRight: 5 }}>{user_nickname.slice(0, 1).toUpperCase()}</Avatar>
+        <Avatar style={{ height: 30, width: 30, marginRight: 5 }}>
+          {image ? (
+            <img src={`${process.env.REACT_APP_SERVER_URL}${image}`} style={{ height: 30, width: 30 }} alt="profile" />
+          ) : (
+            user_nickname.slice(0, 1).toUpperCase()
+          )}
+        </Avatar>
         <ParticipantsList>{user_nickname}</ParticipantsList>
       </Button>
       <StyledMenu id="customized-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
