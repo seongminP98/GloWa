@@ -56,7 +56,7 @@ const FriendsListContainer = () => {
     e.preventDefault();
     const req_nickname = e.target.req_nickname.value;
     await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/friend/search`, { req_nickname })
+      .post(`${process.env.REACT_APP_SERVER_URL}/friend/search`, { req_nickname }, { withCredentials: true })
       .then((response) => {
         setSearchedList(response.data.result);
         setMode('search');
