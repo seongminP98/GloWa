@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Avatar } from '@material-ui/core';
 
 const MainDiv = styled.div`
   height: 40px;
@@ -10,7 +11,14 @@ const MainDiv = styled.div`
   margin-top: 5px;
 `;
 
-const NickDiv = styled.div``;
+const NickDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const NicknameDiv = styled.div`
+  margin-left: 5px;
+`;
 
 const InviteButton = styled.button`
   border: none;
@@ -20,7 +28,10 @@ const InviteButton = styled.button`
 const FriendsResultPresenter = ({ id, nickname, isDetailScreen, onInviteButtonClick }) => {
   return (
     <MainDiv>
-      <NickDiv>{nickname}</NickDiv>
+      <NickDiv>
+        <Avatar style={{ height: 30, width: 30 }}>{nickname.slice(0, 1).toUpperCase()}</Avatar>
+        <NicknameDiv>{nickname}</NicknameDiv>
+      </NickDiv>
       {isDetailScreen && <InviteButton onClick={onInviteButtonClick}>초대</InviteButton>}
     </MainDiv>
   );
