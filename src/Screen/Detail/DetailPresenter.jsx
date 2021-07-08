@@ -203,7 +203,7 @@ const DetailPresenter = (props) => {
     if (m === 'AM') return '오전';
     else return '오후';
   };
-
+  console.log(member);
   return (
     <Detail>
       {!loading && mode === 'normal' && (
