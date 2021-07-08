@@ -57,7 +57,7 @@ const HeaderUserIconPresenter = ({ user, onImgChangeButtonClick, onChange }) => 
       >
         <Avatar style={{ height: 30, width: 30, marginRight: 5 }}>
           {user.image ? (
-            <img src={`${process.env.REACT_APP_SERVER_URL}${user.image}`} alt="profile" />
+            <img src={`${process.env.REACT_APP_SERVER_URL}${user.image}`} style={{ height: 30, width: 30 }} alt="profile" />
           ) : (
             user.nickname.slice(0, 1).toUpperCase()
           )}
