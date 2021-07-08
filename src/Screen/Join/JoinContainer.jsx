@@ -74,13 +74,23 @@ const JoinContainer = () => {
       });
   };
 
+  const requestLogin = async () => {
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, { id, password }, { withCredentials: true })
+      .then((response) => {
+        store.dispatch({ type: 'LOGIN', user: response.data.data });
+        history.push({ pathname: '/' });
+      })
+      .catch((error) => window.alert(error.response.data.message));
+  };
+
   const requestJoin = async () => {
     await axios
       .post(`${process.env.REACT_APP_SERVER_URL}/join`, { user_id: id, password, nickname })
       .then(async (response) => {
         await store.dispatch({ type: 'LOGIN', user: response.data.dataValues });
         window.alert('정상적으로 회원가입 되었습니다!');
-        history.push({ pathname: '/' });
+        requestLogin();
       })
       .catch((err) => window.alert('에러가 발생하였습니다!'));
   };
