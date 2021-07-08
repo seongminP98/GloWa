@@ -10,9 +10,13 @@ router.post('/search', async (req,res,next)=>{
     let list = await User.findAll({
         attributes:['id','nickname','image'],
         where:{ 
-            nickname:{
-                [Op.like]: `%${req.body.req_nickname}%` //검색할 닉네임
-            }
+            [Op.and]:[
+                {nickname:{
+                    [Op.like]: `%${req.body.req_nickname}%` //검색할 닉네임
+                }},
+                {id : {[Op.notIn]:[req.body.id]}}
+            ]
+            
         }
     })
     if(list){
