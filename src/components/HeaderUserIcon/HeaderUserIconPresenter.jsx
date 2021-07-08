@@ -9,6 +9,7 @@ const HeaderUserIconPresenter = ({ user }) => {
 
   const ParticipantsListItemDiv = styled.div`
     display: flex;
+    font-family: 'MaplestoryOTFBold';
     align-items: center;
   `;
 
