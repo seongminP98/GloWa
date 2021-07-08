@@ -25,7 +25,6 @@ router.post('/login',(req, res, next)=>{
 })
 
 router.get('/login',(req,res,next)=>{
-    console.log('get방식',req.user);
     if (req.user) {
         res.status(200).send({ code: 200, data: req.user });
     } else {

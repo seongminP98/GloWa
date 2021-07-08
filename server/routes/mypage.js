@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const User = require('../models/user');
 
-router.post('/favorites/add',async (req,res,next)=>{
+router.post('/favorites/add',async (req,res,next)=>{ //즐겨찾기 추가
     let already_check = await Favorites.findAll({
         where : {
             my_id : req.user.id,
@@ -30,7 +30,7 @@ router.post('/favorites/add',async (req,res,next)=>{
     res.status(200).send({code: 200, message: '즐겨찾기 등록 완료'});
 })
 
-router.get('/favorites/list', async (req,res,next)=>{
+router.get('/favorites/list', async (req,res,next)=>{ //즐겨찾기 목록
     let list = await Favorites.findAll({
         where : {
             my_id : req.user.id,
@@ -43,7 +43,7 @@ router.get('/favorites/list', async (req,res,next)=>{
     }
 })
 
-router.delete('/favorites/delete/:favorite_id', async(req,res,next)=>{
+router.delete('/favorites/delete/:favorite_id', async(req,res,next)=>{ //즐겨찾기 삭제
     await Favorites.destroy({
         where:{
             id: req.params.favorite_id,

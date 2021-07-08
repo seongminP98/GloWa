@@ -14,7 +14,7 @@ router.post('/search', async (req,res,next)=>{
                 {nickname:{
                     [Op.like]: `%${req.body.req_nickname}%` //검색할 닉네임
                 }},
-                {id : {[Op.notIn]:[req.user.id]}}
+                {id : {[Op.notIn]:[req.user.id]}} //나는 검색목록에 제외
             ]
             
         }
@@ -84,7 +84,6 @@ router.get('/req/list', async (req,res,next)=>{//요청받은 친구목록
     let list = [];
     if(friend.length>0){
         for(let i=0; i<friend.length; i++){
-            console.log(friend[i]);
             let f = await User.findOne({
                 attributes:['id', 'nickname', 'image'],
                 where:{
