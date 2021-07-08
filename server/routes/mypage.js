@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Favorites = require('../models/favorites');
 const db = require('../models');
-//const multer = require('multer');
-//const path = require('path');
-//const fs = require('fs');
-//const User = require('../models/user');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const User = require('../models/user');
 
 router.post('/favorites/add',async (req,res,next)=>{
     let already_check = await Favorites.findAll({
@@ -51,7 +51,7 @@ router.delete('/favorites/delete/:favorite_id', async(req,res,next)=>{
     })
     res.status(200).send({code: 200, message: '삭제되었습니다.'});
 })
-/*
+
 try{
     fs.readdirSync('uploads');
 } catch(error){
@@ -60,16 +60,7 @@ try{
 }
 
 const upload = multer({
-    storage: multer.diskStorage({
-        destination(req,file,cb){
-            cb(null,'uploads/'); //저장되는 경로
-        },
-        filename(req,file,cb){
-            const ext = path.extname(file.originalname);
-            cb(null,path.basename(file.originalname, ext) + Date.now() + ext);
-        },
-    }),
-    limits: {fileSize: 5 * 1024 * 1024},
+    dest: './uploads'
 });
 
 router.post('/image', upload.single('img'), async (req,res,next)=>{ //req.file로 이미지 들어옴
@@ -82,7 +73,7 @@ router.post('/image', upload.single('img'), async (req,res,next)=>{ //req.file�
         )
     res.status(200).send({code:200, result: img});
 })
-*/
+
 
 
 module.exports = router;

@@ -82,7 +82,7 @@ router.get('/req/list', async (req,res,next)=>{//요청받은 친구목록
         for(let i=0; i<friend.length; i++){
             console.log(friend[i]);
             let f = await User.findOne({
-                attributes:['id', 'nickname'],
+                attributes:['id', 'nickname', 'image'],
                 where:{
                     id: friend[i].my_id
                 }
@@ -146,7 +146,7 @@ router.get('/list',async (req,res,next) =>{
     if(friend.length>0){
         for(let i=0; i<friend.length; i++){
             let f = await User.findOne({
-                attributes:['id', 'nickname'],
+                attributes:['id', 'nickname', 'image'],
                 where:{
                     id: friend[i].dataValues.id,
                 }
