@@ -5,20 +5,18 @@ const InvSchedule = require('../models/invSchedule');
 const db = require('../models');
 const User = require('../models/user');
 
-router.post('/makeSchedule', async (req,res,next)=>{ 
-    console.log(req.body.name);
+router.post('/makeSchedule', async (req,res,next)=>{ //스케줄 만들기
     let check = await Schedule.findAll({ //중복된 스케줄 이름 확인
         where: {
             my_id: req.user.id,             //로그인한 사용자 아이디(스케줄 만들사람)
             schedule_name: req.body.name,   //만들 스케줄 이름
         }
     })
-    //console.log(check.length);
     if(check.length>0){
         return res.status(400).send({code: 400, message: '일정 이름을 변경해 주세요'})
     }
 
-    await Schedule.create({ //스케줄 만들기
+    await Schedule.create({ //스케줄 DB에 저장
         my_id: req.user.id,  //스케줄 만든 유저 아이디
         schedule_name: req.body.name, //스케줄 이름
         place: req.body.place,      //스케줄 장소
@@ -38,10 +36,6 @@ router.post('/makeSchedule', async (req,res,next)=>{
     })
     
     await sId.addUser(parseInt(myId.id,10)); //schedulemanage에 user와 schedule 관계설정.
-    // await db.sequelize.models.schedulemanage.create({
-    //     UserId: req.body.id,
-    //     ScheduleId: sId.id,
-    // })
     res.status(200).send({code: 200, message: '일정 등록 완료'});
 })
 
@@ -51,11 +45,9 @@ router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
             id: req.user.id //로그인한 사용자 아이디
         }
     })
-    //console.log('마이아이디',myId);
     let schedule = await myId.getSchedules();
-    //console.log('스케줄',schedule)
     let list = [];
-    //console.log("스케줄길이:",schedule.length);
+
     if(Array.isArray(schedule) && schedule.length){
         for(let i=0; i<schedule.length; i++){
             let s = await Schedule.findOne({
@@ -86,7 +78,7 @@ router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
             }
         })
         let member = await sche.getUsers();
-        //console.log("길이",member.length)
+        
         for(let j=0; j<member.length; j++){
             let mem = new Object();
             mem.id = member[j].dataValues.id,
@@ -99,7 +91,6 @@ router.get('/list', async (req,res,next)=>{ //내 스케줄 목록
     for(let i=0; i<list.length; i++){
         list[i].members = ml[i];
     }
-    //console.log(list)
 
     if(Array.isArray(list) && list.length){
         res.status(200).send({code: 200, result: list});
@@ -128,14 +119,12 @@ router.post('/invite', async (req,res,next)=>{ //스케줄 초대
     })
     
     let alreadySchedule = await friend.getSchedules(); //스케줄 초대한 친구의 모든 스케줄 가져오기
-    console.log('alreadySchedule',alreadySchedule);
+
     if(Array.isArray(alreadySchedule) && alreadySchedule.length){
         for(let i=0; i<alreadySchedule.length; i++){                        //초대할 스케줄 id
 
             if(String(alreadySchedule[i].dataValues.id) === req.body.schedule_id){ //스케줄 초대한 친구가 이미 내가 초대한 스케줄에 있다면.
                 return res.status(200).send({code:200, message: '이미 일정에 있습니다.'});
-            }else{
-                console.log('다름');
             }
         }
     }
@@ -169,7 +158,7 @@ router.get('/invite/list', async (req,res,next)=>{ //초대받은 스케줄 목�
         }
     })
     let list = [];
-    //console.log('스케줄.id',schedule[0].id);
+
     if(Array.isArray(schedule) && schedule.length){
         for(let i=0; i<schedule.length; i++){
             let s = await Schedule.findOne({
@@ -214,7 +203,7 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
             id: req.user.id //내 아이디 
         }
     })
-    console.log(inv);
+
     await myId.addSchedule(parseInt(req.body.schedule_id),10); //스케줄 아이디 invite/list에 있는 그냥 id
 
     await InvSchedule.destroy({
@@ -227,7 +216,7 @@ router.post('/accept', async (req,res,next)=>{ //초대받은 스케줄 수락
     res.status(200).send({code: 200, message: '일정 수락 완료'});
 })
 
-router.post('/reject', async(req, res,next)=>{
+router.post('/reject', async(req, res,next)=>{ //초대받은 스케줄 거절
     let inv= await InvSchedule.findOne({
         where:{
             schedule_id: req.body.schedule_id, //초대받은 스케줄 아이디  //초대받은 스케줄목록에 있는 schedule_id
@@ -289,7 +278,7 @@ router.delete('/exit/:schedule_id', async(req,res,next)=>{ //스케줄 나가기
     }
 })
 
-router.patch('/modify', async(req,res,next)=>{
+router.patch('/modify', async(req,res,next)=>{ //스케줄 수정
     let schedule = await Schedule.findOne({
         where :{
             id : req.body.schedule_id
@@ -326,7 +315,7 @@ router.patch('/modify', async(req,res,next)=>{
    
 })
 
-router.post('/transferSchedule', async(req,res,next)=>{
+router.post('/transferSchedule', async(req,res,next)=>{ //스케줄 권한 넘기기
     let schedule = await Schedule.findOne({
         where :{
             id : req.body.schedule_id //이 스케줄 아이디
@@ -334,11 +323,9 @@ router.post('/transferSchedule', async(req,res,next)=>{
     })
     let members = await schedule.getUsers();
     let check = false;
-    //console.log(members[0].dataValues)
-    console.log
+
     for(let i=0; i<members.length; i++){
         if(req.body.friend_id === members[i].dataValues.id){
-            console.log('ok')
             check = true;
         }
     }
@@ -365,7 +352,7 @@ router.post('/transferSchedule', async(req,res,next)=>{
     }
 })
 
-router.post('/kick', async(req,res,next)=>{
+router.post('/kick', async(req,res,next)=>{ //스케줄에서 추방
     let schedule = await Schedule.findOne({
         where:{
             id: req.body.schedule_id
@@ -391,7 +378,7 @@ router.post('/kick', async(req,res,next)=>{
     res.status(200).send({code:200,message:'추방되었습니다.'});
 })
 
-router.get('/:schedule_id', async(req,res,next)=>{
+router.get('/:schedule_id', async(req,res,next)=>{ //스케줄 디테일
     let schedule = await Schedule.findOne({
         where:{
             id:req.params.schedule_id
@@ -423,7 +410,6 @@ router.get('/:schedule_id', async(req,res,next)=>{
         })
         schedule.dataValues.master_nickname = master.dataValues.nickname
         schedule.dataValues.member = members;
-        //console.log('스케줄',schedule)
 
         res.status(200).send({code:200, result:schedule})
     }
