@@ -14,7 +14,7 @@ router.post('/search', async (req,res,next)=>{
                 {nickname:{
                     [Op.like]: `%${req.body.req_nickname}%` //검색할 닉네임
                 }},
-                {id : {[Op.notIn]:[req.body.id]}}
+                {id : {[Op.notIn]:[req.user.id]}}
             ]
             
         }
