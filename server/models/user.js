@@ -17,6 +17,11 @@ module.exports = class User extends Sequelize.Model {
                 type: Sequelize.STRING(150),
                 allowNull: false,
             },
+            image: {
+                type: Sequelize.STRING(100),
+                allowNull: true,
+                defaultValue: null,
+            }
         },{
             sequelize,
             underscored: false,

@@ -46,6 +46,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 passportConfig();
 
+app.use('/image', express.static('./uploads'))
 app.use('/auth', authRouter);
 app.use('/join', joinRouter);
 app.use('/friend', friendRouter);
