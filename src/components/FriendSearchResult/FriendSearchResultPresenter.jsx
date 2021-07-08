@@ -38,11 +38,17 @@ const RejectButton = styled.button`
 
 const ReqForm = styled.form``;
 
-const FriendSearchResultPresenter = ({ id, nickname, FriendAddbuttonClick, is_req, onAcceptButtonClick, user, is_my_friend }) => {
+const FriendSearchResultPresenter = ({ id, nickname, image, FriendAddbuttonClick, is_req, onAcceptButtonClick, user, is_my_friend }) => {
   return (
     <MainDiv>
       <NickDiv>
-        <Avatar style={{ height: 30, width: 30 }}>{nickname.slice(0, 1).toUpperCase()}</Avatar>
+        <Avatar style={{ height: 30, width: 30 }}>
+          {image ? (
+            <img src={`${process.env.REACT_APP_SERVER_URL}${image}`} style={{ height: 30, width: 30 }} alt="profile" />
+          ) : (
+            nickname.slice(0, 1).toUpperCase()
+          )}
+        </Avatar>
         <NicknameDiv>{nickname}</NicknameDiv>
       </NickDiv>
       {is_req ? (

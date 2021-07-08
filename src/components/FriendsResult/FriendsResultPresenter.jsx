@@ -25,11 +25,17 @@ const InviteButton = styled.button`
   cursor: pointer;
 `;
 
-const FriendsResultPresenter = ({ id, nickname, isDetailScreen, onInviteButtonClick }) => {
+const FriendsResultPresenter = ({ id, nickname, isDetailScreen, onInviteButtonClick, image }) => {
   return (
     <MainDiv>
       <NickDiv>
-        <Avatar style={{ height: 30, width: 30 }}>{nickname.slice(0, 1).toUpperCase()}</Avatar>
+        <Avatar style={{ height: 30, width: 30 }}>
+          {image ? (
+            <img src={`${process.env.REACT_APP_SERVER_URL}${image}`} style={{ height: 30, width: 30 }} alt="profile" />
+          ) : (
+            nickname.slice(0, 1).toUpperCase()
+          )}
+        </Avatar>
         <NicknameDiv>{nickname}</NicknameDiv>
       </NickDiv>
       {isDetailScreen && <InviteButton onClick={onInviteButtonClick}>초대</InviteButton>}

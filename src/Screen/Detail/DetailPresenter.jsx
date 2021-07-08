@@ -237,6 +237,7 @@ const DetailPresenter = (props) => {
                 <ParticipantsListComponent
                   master_id={my_id}
                   key={index}
+                  {...m}
                   user_id={m.id}
                   user_nickname={m.nickname}
                   reqScheduleDetail={reqScheduleDetail}
@@ -247,7 +248,11 @@ const DetailPresenter = (props) => {
               member?.map((m, index) => (
                 <ParticipantsListItemDiv>
                   <Avatar style={{ height: 30, width: 30 }}>
-                    {m.id !== my_id ? m.nickname.slice(0, 1).toUpperCase() : <i className="fas fa-crown" style={{ fontSize: 13 }}></i>}
+                    {m.image ? (
+                      <img src={`${process.env.REACT_APP_SERVER_URL}${m.image}`} style={{ height: 30, width: 30 }} alt="profile" />
+                    ) : (
+                      m.nickname.slice(0, 1).toUpperCase()
+                    )}
                   </Avatar>
                   <ParticipantsList key={index}>{m.nickname}</ParticipantsList>
                 </ParticipantsListItemDiv>

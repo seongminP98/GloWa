@@ -4,7 +4,7 @@ import FriendSearchResultPresenter from './FriendSearchResultPresenter';
 import store from '../../store';
 import { useHistory } from 'react-router';
 
-const FriendSearchResultContainer = ({ id: req_id, nickname, is_req, refreshList, is_my_friend }) => {
+const FriendSearchResultContainer = ({ id: req_id, nickname, is_req, refreshList, is_my_friend, image }) => {
   const history = useHistory();
   const user = store.getState().user;
 
@@ -43,6 +43,7 @@ const FriendSearchResultContainer = ({ id: req_id, nickname, is_req, refreshList
       is_req={is_req}
       onAcceptButtonClick={onAcceptButtonClick}
       user={user}
+      image={image}
       is_my_friend={is_my_friend}
     />
   );

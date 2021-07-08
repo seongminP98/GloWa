@@ -123,7 +123,7 @@ const FriendsListPresenter = ({
                     <FriendsResult
                       key={index}
                       id={r.id}
-                      nickname={r.nickname}
+                      {...r}
                       isDetailScreen={location.pathname.startsWith('/schedule/detail')} // Detail 화면인 경우 친구를 일정에 추가하는 버튼을 생성한다.
                     />
                   ))}
@@ -140,7 +140,7 @@ const FriendsListPresenter = ({
                   <FriendSearchResult
                     key={index}
                     id={r.id}
-                    nickname={r.nickname}
+                    {...r}
                     is_my_friend={friendList.find((friend) => friend.nickname === r.nickname)}
                   />
                 ))}
