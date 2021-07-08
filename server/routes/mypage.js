@@ -65,15 +65,13 @@ const upload = multer({
 
 router.post('/image', upload.single('img'), async (req,res,next)=>{ //req.file로 이미지 들어옴
     //upload.single('img') : 폼데이터의 속성명이 img이거나 폼 태그 인풋의 name이 img인 파일 하나를 받는다.
-    console.log(req.flie);
-    let img = `/img/${req.file.filename}`;
+    let img = `/image/${req.file.filename}`;
     await User.update(
         {image: req.file},
         {where:{id: req.user.id}}
         )
     res.status(200).send({code:200, result: img});
 })
-
 
 
 module.exports = router;
